@@ -1,0 +1,13 @@
+services:
+  db:
+    image: mysql
+    container_name: livraria_jpa
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - livraria_jpa:/var/lib/mysql
+
+volumes:
+  livraria_jpa:
