@@ -81,6 +81,8 @@ public class ClienteService {
         Cliente cliente = findById(newCliente.getId());
         //overwride all mutable fields
         cliente.setNome(newCliente.getNome() != null ? newCliente.getNome(): cliente.getNome());
+        cliente.setDataNascimento(newCliente.getDataNascimento() != null ? newCliente.getDataNascimento() : cliente.getDataNascimento());
+        cliente.setCpf(newCliente.getCpf() != null ? newCliente.getCpf() : cliente.getCpf());
 
         repo.save(cliente);
     }

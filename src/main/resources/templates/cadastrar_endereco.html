@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Cartões</title>
+</head>
+<body>
+    Cadastrar cartão
+
+    <div class="container">
+        <form role="form" method="post" th:action="@{/cliente/addEndereco}" th:object="${endereco}">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="logradouro">Logradouro</label>
+                <input 
+                        type="text" 
+                        class="form-control" 
+                        name="logradouro" 
+                        th:field="*{logradouro}"  
+                        id="logradouro" 
+                        placeholder="Rua XPTO">
+              </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="numero">Numero</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="numero"
+                        th:field="*{numero}"
+                        id="numero" 
+                        placeholder="numero">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="complemento">Complemento</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="complemento"
+                        th:field="*{complemento}"
+                        id="complemento" 
+                        placeholder="bloco A apto 42">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="bairro">Bairro</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="bairro"
+                        th:field="*{bairro}"
+                        id="bairro" 
+                        placeholder="bairro">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="cep">CEP</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="cep"
+                        th:field="*{cep}"
+                        id="cep" 
+                        placeholder="cep">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="cidade">Cidade</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name="cidade"
+                        th:field="*{cidade.nome}"
+                        id="cidade" 
+                        placeholder="cidade">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="uf">UF</label>
+                    <input 
+                        style="text-transform:uppercase"
+                        type="uf" 
+                        class="form-control" 
+                        name="uf"
+                        th:field="*{cidade.uf}"
+                        maxlength="2"
+                        id="uf" 
+                        placeholder="SP,MG ...">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Cadastrar endereço</button>
+          </form>
+        </div>
+</body>
+</html>
