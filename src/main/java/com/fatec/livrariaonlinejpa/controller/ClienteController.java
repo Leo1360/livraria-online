@@ -56,7 +56,9 @@ public class ClienteController {
     }
 
     @GetMapping("/endereco")
-    public String listarEndereco(HttpSession httpSession,Model model) {
+    public String listarEndereco(HttpSession session,Model model) {
+        Cliente cliente = clienteService.findById((long) session.getAttribute("clienteId"));
+        model.addAttribute("enderecos", cliente.getEnderecosEntrega());
         return "enderecos";
     }
 
