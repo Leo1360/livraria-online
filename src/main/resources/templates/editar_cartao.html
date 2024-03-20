@@ -10,11 +10,13 @@
     <h1>Cadastrar Endereço</h1>
     
     <div class="container">
-        <form id="formEndereco" role="form" method="post" th:action="@{/cliente/addEndereco}" th:object="${endereco}">
+        <form id="formEndereco" role="form" method="post" th:action="@{/endereco/editarEndereco}" th:object="${endereco}">
+            <input type="hidden" th:value="*{id}" th:field="*{id}">
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="logradouro">Logradouro</label>
                 <input 
+                    th:value="*{logradouro}"
                     type="text"
                     class="form-control" 
                     name="logradouro" 
@@ -27,6 +29,7 @@
                 <div class="form-group col-md-3">
                     <label for="numero">Numero</label>
                     <input 
+                        th:value="*{numero}"
                         type="text" 
                         class="form-control" 
                         name="numero"
@@ -37,6 +40,7 @@
                 <div class="form-group col-md-3">
                     <label for="complemento">Complemento</label>
                     <input 
+                        th:value="*{complemento}"
                         type="text" 
                         class="form-control" 
                         name="complemento"
@@ -47,6 +51,7 @@
                 <div class="form-group col-md-3">
                     <label for="bairro">Bairro</label>
                     <input 
+                        th:value="*{bairro}"
                         type="text" 
                         class="form-control" 
                         name="bairro"
@@ -57,6 +62,7 @@
                 <div class="form-group col-md-3">
                     <label for="cep">CEP</label>
                     <input 
+                        th:value="*{cep}"
                         type="text" 
                         class="form-control" 
                         name="cep"
@@ -69,6 +75,7 @@
                 <div class="form-group col-md-6">
                     <label for="cidade">Cidade</label>
                     <input 
+                        th:value="*{cidade.nome}"
                         type="text" 
                         class="form-control" 
                         name="cidade"
@@ -79,6 +86,7 @@
                 <div class="form-group col-md-6">
                     <label for="uf">UF</label>
                     <input 
+                        th:value="*{cidade.uf}"
                         style="text-transform:uppercase"
                         type="text" 
                         class="form-control" 
@@ -92,14 +100,5 @@
             <button type="submit" class="btn btn-primary">Cadastrar endereço</button>
           </form>
         </div>
-
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-            var edit = [[${onEdit}]];
-            /*]]>*/
-            if(edit != null){
-                document.getElementById("formEndereco").action="/cliente/addEndereco?onEdit=1";
-            }
-        </script>
 </body>
 </html>

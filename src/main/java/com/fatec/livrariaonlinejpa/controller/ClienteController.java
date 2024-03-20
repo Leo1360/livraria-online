@@ -28,53 +28,76 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class ClienteController {
     private final ClienteService clienteService;
+
+    @GetMapping("/setSession/{id}")
+    public String getMethodName(HttpSession session,@PathVariable long id) {
+        session.setAttribute("clienteId", id);
+        return "redirect:/cliente/perfil";
+    }
     
+    
+    // Telas de exibição
+    @GetMapping("/cartoes")
+    public String listarCartoes(HttpSession session,Model model) {
+        if(session.getAttribute("clienteId") == null){
+            return "redirect:/cliente/novo";
+        }
+        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
+        model.addAttribute("listCartoes", cliente.getCartoes());
+        return "cartoes";
+    }
+    
+    @GetMapping("/endereco")
+    public String listarEndereco(HttpSession session,Model model) {
+        if(session.getAttribute("clienteId") == null){
+            return "redirect:/cliente/novo";
+        }
+        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
+        model.addAttribute("listEndereco", cliente.getEnderecosEntrega());
+        return "enderecos";
+    }
+
+    @GetMapping("/perfil")
+    public String mostrarCliente(HttpSession session,Model model) {
+        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
+        model.addAttribute("cliente", cliente);
+        return "perfil";
+    }
+
+
+
+    // Telas de cadastro/forms
     @GetMapping("/novo")
-    public String novocliente(HttpSession httpSession,Model model) {
+    public String novocliente(HttpSession session,Model model) {
         Cliente cliente = new Cliente();
         model.addAttribute("cliente", cliente);
         return "cadastro";
     }
 
-    @GetMapping("/cartoes")
-    public String listarCartoes(HttpSession httpSession,Model model) {
-        return "cartoes";
-    }
-
-    @GetMapping("/cadastrarcartao")
-    public String cadastroCartao(HttpSession httpSession,Model model) {
-        Cartao cartao = new Cartao();
-        model.addAttribute("cartao", cartao);
-        return "cadastrar_cartao";
-    }
-
-    @GetMapping("/perfil")
-    public String mostrarCliente(HttpSession httpSession,Model model) {
-        Cliente cliente = clienteService.findById((long)httpSession.getAttribute("clienteId"));
-        model.addAttribute("cliente", cliente);
-        return "perfil";
-    }
-
-    @GetMapping("/endereco")
-    public String listarEndereco(HttpSession session,Model model) {
-        Cliente cliente = clienteService.findById((long) session.getAttribute("clienteId"));
-        model.addAttribute("enderecos", cliente.getEnderecosEntrega());
-        return "enderecos";
-    }
-
-    @GetMapping("/cadastrarendereco")
-    public String cadastroEndereco(HttpSession httpSession,Model model) {
-        Endereco endereco =  new Endereco();
-        model.addAttribute("endereco", endereco);
-        return "cadastrar_endereco";
-    }
-
     @GetMapping("/editar")
-    public String editarCliente(HttpSession httpSession, Model model){
-        Cliente cliente = clienteService.findById((long)httpSession.getAttribute("clienteId"));
+    public String editarCliente(HttpSession session, Model model){
+        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("cliente", cliente);
         return "editar_cliente";
     }
+
+    @GetMapping("/cadastrarcartao")
+    public String cadastroCartao(HttpSession session,Model model, @RequestParam(name = "onEdit", required = false) String onEdit) {
+        Cartao cartao = new Cartao();
+        model.addAttribute("cartao", cartao);
+        model.addAttribute("onEdit", onEdit);
+        return "cadastrar_cartao";
+    }
+
+    @GetMapping("/cadastrarendereco")
+    public String cadastroEndereco(HttpSession session,Model model, @RequestParam(required=false, name = "onEdit") String onEdit) {
+        Endereco endereco =  new Endereco();
+        model.addAttribute("endereco", endereco);
+        model.addAttribute("onEdit", onEdit);
+        return "cadastrar_endereco";
+    }
+
+    
 
     // --------------------create----------------------------
 
@@ -88,18 +111,24 @@ public class ClienteController {
     }
 
     @PostMapping("/addCartao")
-    public String addCartao(HttpSession session, @ModelAttribute("cartao") Cartao cartao) {
+    public String addCartao(HttpSession session, @ModelAttribute("cartao") Cartao cartao, @RequestParam(name = "onEdit", required = false) String onEdit) {
         // salvando cliente
         clienteService.addCartao((long)session.getAttribute("clienteId"),cartao);
         // salvando id do cliente na sessão
+        if(onEdit != null){
+            return "redirect:/cliente/cartoes";
+        }
         return "redirect:/cliente/cadastrarendereco";
     }
     
     @PostMapping("/addEndereco")
-    public String addEndereco(HttpSession session, @ModelAttribute("endereco") Endereco endereco) {
+    public String addEndereco(HttpSession session, @ModelAttribute("endereco") Endereco endereco, @RequestParam(required=false, name = "onEdit") String onEdit) {
         // salvando cliente
         clienteService.addEnderecoEntrega((long)session.getAttribute("clienteId"),endereco);
         // salvando id do cliente na sessão
+        if (onEdit != null) {
+            return "redirect:/cliente/endereco";
+        }
         return "redirect:/cliente/perfil";
     }
 
@@ -114,21 +143,22 @@ public class ClienteController {
 
     // ------------------DELETE------------------------
 
-    @DeleteMapping("/deleteCartao/{id}")
-    public String  deleteCartao(HttpSession session,@PathVariable Long id){
+    @GetMapping("/deleteCartao")
+    public String  deleteCartao(HttpSession session,@RequestParam(name = "id") Long id){
         clienteService.removeCartao((long)session.getAttribute("clienteId"), id);
-        return "redirect:/cartoes";
+        return "redirect:/cliente/cartoes";
     }
 
-    @DeleteMapping("/deleteEndereco/{id}")
-    public String  deleteEndereco(HttpSession session,@PathVariable Long id){
+    @GetMapping("/deleteEndereco")
+    public String  deleteEndereco(HttpSession session,@RequestParam(name = "id") Long id){
         clienteService.removeEnderecoEntrega((long)session.getAttribute("clienteId"), id);
-        return "redirect:/endereco";
+        return "redirect:/cliente/endereco";
     }
 
     @GetMapping("/deletarConta")
     public String deletarConta(HttpSession session) {
         clienteService.delete((Long) session.getAttribute("clienteId"));
+        session.removeAttribute("clienteId");
         return "redirect:/cliente/novo";
     }
     
