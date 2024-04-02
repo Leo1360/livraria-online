@@ -16,6 +16,5 @@
         - /cliente/cupons     →  Tela cupons
         - /admin              →  Tela de Administrador
         - /admin/pedidos      →  Tela de Status de pedido
-        - /admin/cupons       →  Tela de Cupons 
-        - /admin/novoCupom    →  Tela de cadastro de cupons 
-        - /admin/editarCupom  →  Tela de edição de cupons
+        - /admin/cupons       →  Tela de Cupons
+        - /admin/novoCupom    →  Tela de cadastro de cupons
