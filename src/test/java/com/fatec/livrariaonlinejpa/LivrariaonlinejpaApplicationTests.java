@@ -50,10 +50,7 @@ class LivrariaonlinejpaApplicationTests {
 	@Test
 	void addCartaoCliente(){
 		Cartao cartao = new Cartao();
-		cartao.setBandeira("visa");
-		cartao.setDigitosFinais("1548");
 		cartao.setCpf("41036801802");
-		cartao.setToken("65191sd951as9d51as95d1");
 
 		clienteService.addCartao(1, cartao);
 	}

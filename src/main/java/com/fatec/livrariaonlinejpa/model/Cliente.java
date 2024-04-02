@@ -1,5 +1,6 @@
 package com.fatec.livrariaonlinejpa.model;
 
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -20,6 +21,10 @@ public class Cliente{
     private long id;
     
     private String nome;
+
+    private String dataNascimento; 
+
+    private String cpf;
 
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
