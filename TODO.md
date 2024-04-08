@@ -5,7 +5,8 @@
 
 
 
-Uniformizar estilo das paginas {start:2024-04-02T16:55:18}
-Seprar htmls em modulos
+Uniformizar estilo das paginas {start:2024-04-02T16:55:18} {cm:2024-04-03} {duration:1d_08m} {h}
+Seprar htmls em modulos {cm:2024-04-03} {h}
 Ajustar link dos HTMLs
 Decidir se vai usar react
+add testes automatizados CRUD {start:2024-04-03T17:09:11} {start:2024-04-03T17:09:35}
