@@ -20,8 +20,9 @@ public class ClienteService {
     private final  ClienteRepository repo;
     
 
-    public void save(Cliente cliente){
-        repo.save(cliente);
+    public Cliente save(Cliente cliente){
+        cliente = repo.save(cliente);
+        return cliente;
     }
 
     public Cliente findById(long id){
