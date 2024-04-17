@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Livraria Online</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <nav class="navbar navbar-expand-lg navbar-light justify-content-between"
+        style="background-color: rgb(28, 71, 101);">
+        <a class="navbar-brand" href="home.html" style="color: white;">Livraria Online</a>
+        <form id="formBusca" action="pesquisa.html" method="get" class="navbar-form" style="width: 50%;">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar ...">
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                        <i class="bi bi-search" style="color: white;"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="carrinho.html" style="color: white;">Carrinho</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="perfil.html" style="color: white;">Perfil</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+
+        <div class="row">
+            <div class="col col-md-3">
+                <label for="inicio">Data inicio</label>
+                <input type="date" name="inicio" id="inicio">
+
+            </div>
+            <div class="col col-md-3">
+
+                <label for="fim">Data Fim</label>
+                <input type="date" name="fim" id="fim">
+            </div>
+            <div class="col col-md-3">
+                <button class="btn" style="background-color: rgb(28, 71, 101); color: white;"> Gerar Gráfico</button>
+            </div>
+        </div>
+
+        <div>
+            <canvas id="myChart"></canvas>
+        </div>
+
+        <script>
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const data = {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [{
+                    label: 'Data Set',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+
+        </script>
+
+
+    </div>
+
+</body>
+
+</html>

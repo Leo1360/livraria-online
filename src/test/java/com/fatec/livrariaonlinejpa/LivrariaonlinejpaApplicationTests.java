@@ -1,5 +1,7 @@
 package com.fatec.livrariaonlinejpa;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +17,9 @@ import com.fatec.livrariaonlinejpa.services.ClienteService;
 class LivrariaonlinejpaApplicationTests {
 	@Autowired
 	ClienteService clienteService;
+	private long clientId;
+	private long enderecoId;
+	private long cartaoId;
 
 	@Test
 	void contextLoads() {
@@ -30,6 +35,8 @@ class LivrariaonlinejpaApplicationTests {
 		cliente.setUser(user);
 
 		clienteService.save(cliente);
+		this.clientId = cliente.getId();
+		assertNotEquals(this.clientId, 0);
 	}
 
 	@Test
@@ -81,7 +88,7 @@ class LivrariaonlinejpaApplicationTests {
 
 	@Test
 	void deleteCliente(){
-		clienteService.delete(2);
+		clienteService.delete(18);
 	}
 
 
