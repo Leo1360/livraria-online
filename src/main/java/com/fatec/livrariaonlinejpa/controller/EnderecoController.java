@@ -29,7 +29,7 @@ public class EnderecoController {
     public String editar(HttpSession session, Model model, @RequestParam(name = "id") long id) {
         Endereco endereco = service.findById(id);
         model.addAttribute("endereco", endereco);
-        return "editar_endereco";
+        return "cliente/editar_endereco";
     }
     
 

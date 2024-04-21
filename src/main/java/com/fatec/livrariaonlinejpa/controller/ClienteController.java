@@ -44,7 +44,7 @@ public class ClienteController {
         }
         Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("listCartoes", cliente.getCartoes());
-        return "cartoes";
+        return "cliente/cartoes";
     }
     
     @GetMapping("/endereco")
@@ -54,14 +54,14 @@ public class ClienteController {
         }
         Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("listEndereco", cliente.getEnderecosEntrega());
-        return "enderecos";
+        return "cliente/enderecos";
     }
 
     @GetMapping("/perfil")
     public String mostrarCliente(HttpSession session,Model model) {
         Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("cliente", cliente);
-        return "perfil";
+        return "cliente/perfil";
     }
 
 
@@ -71,14 +71,14 @@ public class ClienteController {
     public String novocliente(HttpSession session,Model model) {
         Cliente cliente = new Cliente();
         model.addAttribute("cliente", cliente);
-        return "cadastro";
+        return "cliente/cadastro";
     }
 
     @GetMapping("/editar")
     public String editarCliente(HttpSession session, Model model){
         Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("cliente", cliente);
-        return "editar_cliente";
+        return "cliente/editar_cliente";
     }
 
     @GetMapping("/cadastrarcartao")
@@ -86,7 +86,7 @@ public class ClienteController {
         Cartao cartao = new Cartao();
         model.addAttribute("cartao", cartao);
         model.addAttribute("onEdit", onEdit);
-        return "cadastrar_cartao";
+        return "cliente/cadastrar_cartao";
     }
 
     @GetMapping("/cadastrarendereco")
@@ -94,7 +94,7 @@ public class ClienteController {
         Endereco endereco =  new Endereco();
         model.addAttribute("endereco", endereco);
         model.addAttribute("onEdit", onEdit);
-        return "cadastrar_endereco";
+        return "cliente/cadastrar_endereco";
     }
 
     
