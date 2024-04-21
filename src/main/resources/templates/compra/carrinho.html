@@ -10,8 +10,8 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light justify-content-between"
 		style="background-color: rgb(28, 71, 101);">
-		<a class="navbar-brand" href="home.html" style="color: white;">Livraria Online</a>
-		<form id="formBusca" action="pesquisa.html" method="get" class="navbar-form" style="width: 50%;">
+		<a class="navbar-brand" href="../home.html" style="color: white;">Livraria Online</a>
+		<form id="formBusca" action="../pesquisa.html" method="get" class="navbar-form" style="width: 50%;">
 			<div class="input-group">
 				<input type="text" class="form-control" placeholder="Buscar ...">
 				<div class="input-group-btn">
@@ -24,10 +24,10 @@
 		<div class="navbar-nav">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="carrinho.html" style="color: white;">Carrinho</a>
+					<a class="nav-link" href="/carrinho/show" style="color: white;">Carrinho</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="perfil.html" style="color: white;">Perfil</a>
+					<a class="nav-link" href="../cliente/perfil.html" style="color: white;">Perfil</a>
 				</li>
 			</ul>
 		</div>
@@ -80,7 +80,7 @@
 								<p>Bairro: Bom Retiro</p>
 								<p>Cidade: São Paulo</p>
 								<p>UF: SP</p>
-								<a href="selecionar_endereco.html" class="btn" role="button"
+								<a href="../cliente/selecionar_endereco.html" class="btn" role="button"
 									style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
 							</div>
 						</div>
@@ -93,7 +93,7 @@
 									<div class="card-header">
 										*********1234 - MasterCard
 									</div>
-									<a href="selecionar_cartao.html" class="btn" role="button"
+									<a href="../cliente/selecionar_cartao.html" class="btn" role="button"
 										style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
 								</div>
 
@@ -138,6 +138,7 @@
 				</div>
 			</div>
 		</div>
+	</div>
 		<script>
 			var values = [12, 2]
 			function addCupom(cupom) {
