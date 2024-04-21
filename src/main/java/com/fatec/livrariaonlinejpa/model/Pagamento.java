@@ -5,18 +5,11 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Produto {
+public class Pagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private String pathImg;
-
-    private String nome;
-
-    @Column(length = 500)
-    private String descricao;
-    
+    @ManyToOne
+    private Cartao cartao;
     private float valor;
-
 }
