@@ -32,6 +32,7 @@
             </ul>
         </div>
     </nav>
+
     <div class="container mt-5">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -39,30 +40,16 @@
                 <a href="" class="btn" role="button" style="background-color: rgb(28, 71, 101); color: white;">+</a>
             </div>
         </div>
-        <br>
+    </div>
+    <div class="container mt-5" th:each="cartao : ${cartoes}">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                Cartão: *********1234 - MasterCard
-                <a href="carrinho.html" class="btn" role="button"
+                <p th:text="${' Cartão: ' + cartao.getDigitos()}"></p>
+                <a th:href="@{'/carrinho/setCartoes/' + ${cartao.getId()}}" class="btn" role="button"
                     style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
             </div>
         </div>
-        <br>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                Cartão: *********1234 - MasterCard
-                <a href="carrinho.html" class="btn" role="button"
-                    style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
-            </div>
-        </div>
-        <br>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                Cartão: *********1234 - MasterCard
-                <a href="carrinho.html" class="btn" role="button"
-                    style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
-            </div>
-        </div>
+
     </div>
 </body>
 

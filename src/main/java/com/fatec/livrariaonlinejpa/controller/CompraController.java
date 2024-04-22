@@ -5,10 +5,7 @@ import java.util.List;
 
 import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
 import com.fatec.livrariaonlinejpa.model.*;
-import com.fatec.livrariaonlinejpa.services.ClienteService;
-import com.fatec.livrariaonlinejpa.services.EnderecoService;
-import com.fatec.livrariaonlinejpa.services.PedidoService;
-import com.fatec.livrariaonlinejpa.services.ProdutoService;
+import com.fatec.livrariaonlinejpa.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +22,7 @@ public class CompraController {
     private final PedidoService pedidoService;
     private final ProdutoService produtoService;
     private final ClienteService clienteService;
+    private final CartaoService cartaoService;
 
     @GetMapping("/carrinho/show")
     public String getCarrinho(HttpSession session, Model model){
@@ -64,6 +62,13 @@ public class CompraController {
         Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
         model.addAttribute("enderecos",cliente.getEnderecosEntrega());
         return "/compra/selecionar_endereco";
+    }
+
+    @GetMapping("/carrinho/selecionarCartao")
+    public String selecionarCartao(HttpSession session, Model model){
+        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
+        model.addAttribute("cartoes",cliente.getCartoes());
+        return "/compra/selecionar_cartao";
     }
 
 
@@ -114,9 +119,22 @@ public class CompraController {
         return "redirect:/carrinho/show";
     }
 
-    @PostMapping("/carrinho/setCartoes")
-    public String setCartoes(HttpSession session , @RequestBody List<Pagamento> pagamentos){
-        session.setAttribute("cartoes",pagamentos);
+    @GetMapping("/carrinho/setCartoes/{id}")
+    public String setCartoes(HttpSession session , @PathVariable long id){
+        List<Pagamento> pagamentoList = new ArrayList<>();
+        Pagamento pagamento = new Pagamento();
+        pagamento.setCartao(cartaoService.findById(id));
+        List<ItemCompra> itens = (List<ItemCompra>) session.getAttribute("listaProdutos");
+        if(itens != null){
+            float total = 0;
+            for( ItemCompra item: itens){
+                total += (float) (item.getValorUnit() * item.getQnt());
+            }
+            pagamento.setValor(total);
+
+        }
+        pagamentoList.add(pagamento);
+        session.setAttribute("cartoes",pagamentoList);
         return "redirect:/carrinho/show";
     }
 
