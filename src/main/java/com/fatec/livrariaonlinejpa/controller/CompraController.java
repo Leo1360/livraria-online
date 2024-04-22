@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
 import com.fatec.livrariaonlinejpa.model.*;
+import com.fatec.livrariaonlinejpa.services.ClienteService;
 import com.fatec.livrariaonlinejpa.services.EnderecoService;
 import com.fatec.livrariaonlinejpa.services.PedidoService;
 import com.fatec.livrariaonlinejpa.services.ProdutoService;
@@ -23,6 +24,7 @@ public class CompraController {
     private final EnderecoService enderecoService;
     private final PedidoService pedidoService;
     private final ProdutoService produtoService;
+    private final ClienteService clienteService;
 
     @PostMapping("/carrinho/addItem")
     public String addItemCarrinho(HttpSession session , @ModelAttribute("newItem") AddCarrinhoItemDTO itemDto) {
@@ -46,11 +48,11 @@ public class CompraController {
         }
 
         session.setAttribute("listaProdutos", itens);
-        return "compra/carrinho";
+        return "redirect:/carrinho/show";
     }
 
-    @PostMapping("/carrinho/removeItem")
-    public String removeItemCarrinho(HttpSession session ,@RequestBody long idProduto){
+    @GetMapping("/carrinho/removeItem/{idProduto}")
+    public String removeItemCarrinho(HttpSession session ,@PathVariable long idProduto){
         List<ItemCompra> itens = (List<ItemCompra>) session.getAttribute("listaProdutos");
         ItemCompra itemRemove = null ;
         for(ItemCompra item : itens){
@@ -61,7 +63,7 @@ public class CompraController {
         }
         itens.remove(itemRemove);
         session.setAttribute("listaProdutos", itens);
-        return "carrinho";
+        return "redirect:/carrinho/show";
     }
 
     @PostMapping("/carrinho/setEndereco")
@@ -89,8 +91,31 @@ public class CompraController {
 
     @GetMapping("/carrinho/show")
     public String getCarrinho(HttpSession session, Model model){
+        model.addAttribute("itens", (List<ItemCompra>) session.getAttribute("listaProdutos"));
         List<ItemCompra> compraList = (List<ItemCompra>) session.getAttribute("listaProdutos");
-        model.addAttribute("itens", compraList);
+        float total = 0;
+        for(ItemCompra item: compraList){
+            total += item.getValorUnit() * item.getQnt();
+        }
+        model.addAttribute("total",total);
+
+        Endereco endereco = (Endereco) session.getAttribute("enderecoEntrega");
+        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
+        if(endereco == null ){
+            endereco = cliente.getEnderecosEntrega().stream().filter(Endereco::isPreferencial).findFirst().orElse(cliente.getEnderecosEntrega().get(0));
+        }
+        model.addAttribute("endereco",endereco);
+
+        List<Pagamento> pagamentos = ((List<Pagamento>) session.getAttribute("cartoes"));
+        Pagamento pag =  new Pagamento();
+        if(pagamentos == null){
+            pag.setCartao(cliente.getCartoes().get(0));
+            pag.setValor(total);
+        }else{
+            pag = pagamentos.get(0);
+        }
+        model.addAttribute("pagamento", pag);
+
         return "compra/carrinho";
     }
 

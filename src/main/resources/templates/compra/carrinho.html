@@ -42,31 +42,17 @@
 							<th>Item</th>
 							<th>Total Item</th>
 							<th>Valor unit</th>
-							<th>Total</th>
+							<th></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody th:each="item : ${itens}">
 						<tr>
-							<td style="width: min-content;"><input type="number" style="width: 70%;" value="1"
-									onstalled="console.log('aaaa')"></td>
-							<td>Livro XYZ</td>
-							<td>R$ 3,00</td>
-							<td>R$ 3,00</td>
-							<td>R$ 14,00</td>
-						</tr>
-						<tr>
-							<td style="width: min-content;"><input type="number" style="width: 70%;" value="1"></td>
-							<td>Livro XYZ</td>
-							<td>R$ 3,00</td>
-							<td>R$ 6,00</td>
-							<td>R$ 3,00</td>
-						</tr>
-						<tr>
-							<td style="width: min-content;"><input type="number" style="width: 70%;" value="1"></td>
-							<td>Livro XYZ</td>
-							<td>R$ 3,00</td>
-							<td>R$ 3,00</td>
-							<td>R$ 14,00</td>
+							<td><a th:href="@{'/carrinho/removeItem/' + ${item.getProduto().getId()}}"><button>Remover</button></a></td>
+							<td style="width: min-content;"><input type="number" style="width: 70%;" th:value="${item.qnt}"
+									onstalled="console.log('aaaa')" min="1"></td>
+							<td th:text="${item.getProduto().nome}"></td>
+							<td th:text="${#numbers.formatCurrency(item.getValorUnit())}"></td>
+							<td th:text="${#numbers.formatCurrency(item.getValorUnit() * item.qnt)}"></td>
 						</tr>
 					</tbody>
 				</table>
@@ -75,11 +61,11 @@
 						<div class="card">
 							<div class="card-header">Endereço entrega</div>
 							<div class="card-body">
-								<p>Logradouro: Rua dos bobos</p>
-								<p>Numero: 0</p>
-								<p>Bairro: Bom Retiro</p>
-								<p>Cidade: São Paulo</p>
-								<p>UF: SP</p>
+								<p th:text="${'Logradouro: ' + endereco.getLogradouro()}"></p>
+								<p th:text="${'Numero: ' + endereco.getNumero()}"></p>
+								<p th:text="${'Bairro: ' + endereco.getBairro()}"></p>
+								<p th:text="${'Cidade: ' + endereco.getCidade().getNome()}"></p>
+								<p th:text="${'UF: ' + endereco.getCidade().getUf()}"></p>
 								<a href="../cliente/selecionar_endereco.html" class="btn" role="button"
 									style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
 							</div>
@@ -90,8 +76,7 @@
 							<div class="card-header">Cartões</div>
 							<div class="card-body">
 								<div class="card">
-									<div class="card-header">
-										*********1234 - MasterCard
+									<div class="card-header" th:text="${pagamento.getCartao().getDigitos()}">
 									</div>
 									<a href="../cliente/selecionar_cartao.html" class="btn" role="button"
 										style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
@@ -119,7 +104,7 @@
 						<div id="resumo">
 							<div class="row">
 								<div class="col">SubTotal</div>
-								<div id="subtotal" class="col">R$ 12,00</div>
+								<div id="subtotal" class="col" th:text="${total}"></div>
 							</div>
 							<div class="row">
 								<div class="col">Frete</div>
@@ -130,7 +115,7 @@
 						<hr style="background-color: rgb(128, 137, 147);">
 						<div class="row">
 							<div class="col">Total</div>
-							<div id="total" class="col">R$ 14,00</div>
+							<div id="total" class="col" th:text="${total - 2}"></div>
 						</div>
 						<button class="btn btn-block mt-3"
 							style="background-color: rgb(28, 71, 101); color: white;">Finalizar</button>
