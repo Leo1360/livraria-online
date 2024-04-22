@@ -4,8 +4,10 @@ package com.fatec.livrariaonlinejpa.controller;
 import com.fatec.livrariaonlinejpa.model.Cartao;
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.model.Endereco;
+import com.fatec.livrariaonlinejpa.model.Pedido;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 
+import com.fatec.livrariaonlinejpa.services.PedidoService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+import java.util.List;
 
 
 @Controller
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class ClienteController {
     private final ClienteService clienteService;
+    private final PedidoService pedidoService;
 
     @GetMapping("/setSession/{id}")
     public String getMethodName(HttpSession session,@PathVariable long id) {
@@ -97,7 +100,15 @@ public class ClienteController {
         return "cliente/cadastrar_endereco";
     }
 
-    
+
+    @GetMapping("/pedidos")
+    public String listPedidosCliente(HttpSession session,Model model){
+        long id = (Long) session.getAttribute("clienteId");
+        List<Pedido> pedidos = pedidoService.listarPedidosByCliente(id);
+        model.addAttribute("pedidos", pedidos);
+        return "/cliente/pedidos";
+    }
+
 
     // --------------------create----------------------------
 
@@ -161,6 +172,13 @@ public class ClienteController {
         session.removeAttribute("clienteId");
         return "redirect:/cliente/novo";
     }
-    
+
+    @GetMapping("/pedido/{id}")
+    public String getDetalhesPedido(HttpSession session,@PathVariable Long id, Model model){
+        Pedido pedido = pedidoService.findById(id);
+        model.addAttribute("pedido", pedido);
+        return "/cliente/pedido";
+
+    }
 
 }

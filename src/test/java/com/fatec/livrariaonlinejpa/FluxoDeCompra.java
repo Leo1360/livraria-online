@@ -1,11 +1,9 @@
 package com.fatec.livrariaonlinejpa;
 
 import com.fatec.livrariaonlinejpa.model.*;
-import com.fatec.livrariaonlinejpa.repositories.ProdutoRepository;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 import com.fatec.livrariaonlinejpa.services.PedidoService;
 import com.fatec.livrariaonlinejpa.services.ProdutoService;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -59,7 +57,7 @@ class FluxoDeCompra {
         pagamentos.add(pagamento);
         pedido.setPagamentoList(pagamentos);
 
-        pedidoService.salvarPedido(pedido);
+        pedidoService.salvarNovoPedido(pedido);
 
     }
 

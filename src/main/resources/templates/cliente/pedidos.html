@@ -33,54 +33,16 @@
         </div>
     </nav>
 
-    <div class="container">
-        <div class="row mt-4">
-            <div class="col">
+    <div class="container mt-4">
+        <div class="card-deck" th:each="pedido : ${pedidos}">
+            <div class="col-md-4 mt-4">
                 <div class="card">
-                    <h5 class="card-header">Pedido #1234</h5>
+                    <h5 class="card-header" th:text="${'Pedido #' + pedido.getId()}"></h5>
                     <div class="card-body">
-                        <p>Feito em 24/03/2024</p>
-                        <p>Status: Em Separação</p>
-                        <p>Valor: R$10,00</p>
-                        <a href="pedido.html" role="button" class="btn mt-3"
-                            style="background-color: rgb(28, 71, 101); color: white;">Ver detalhes</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <h5 class="card-header">Pedido #1234</h5>
-                    <div class="card-body">
-                        <p>Feito em 24/03/2024</p>
-                        <p>Status: Em Separação</p>
-                        <p>Valor: R$10,00</p>
-                        <a href="pedido.html" role="button" class="btn mt-3"
-                            style="background-color: rgb(28, 71, 101); color: white;">Ver detalhes</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col">
-                <div class="card">
-                    <h5 class="card-header">Pedido #1234</h5>
-                    <div class="card-body">
-                        <p>Feito em 24/03/2024</p>
-                        <p>Status: Em Separação</p>
-                        <p>Valor: R$10,00</p>
-                        <a href="pedido.html" role="button" class="btn mt-3"
-                            style="background-color: rgb(28, 71, 101); color: white;">Ver detalhes</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <h5 class="card-header">Pedido #1234</h5>
-                    <div class="card-body">
-                        <p>Feito em 24/03/2024</p>
-                        <p>Status: Em Separação</p>
-                        <p>Valor: R$10,00</p>
-                        <a href="pedido.html" role="button" class="btn mt-3"
+                        <p th:text="${'Feito em ' + #temporals.format(pedido.getData(), 'dd/MM/yyyy')}"></p>
+                        <p th:text="${'Status: ' + pedido.getStatus()}"></p>
+                        <p th:text="${'Valor: ' + #numbers.formatCurrency(pedido.getTotal())}"></p>
+                        <a th:href="@{'/cliente/pedido/' + ${pedido.getId()}}" role="button" class="btn mt-3"
                             style="background-color: rgb(28, 71, 101); color: white;">Ver detalhes</a>
                     </div>
                 </div>

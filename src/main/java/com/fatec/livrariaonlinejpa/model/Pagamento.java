@@ -11,5 +11,5 @@ public class Pagamento {
     private long id;
     @ManyToOne
     private Cartao cartao;
-    private float valor;
+    private double valor;
 }

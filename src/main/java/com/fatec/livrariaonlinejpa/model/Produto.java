@@ -17,6 +17,6 @@ public class Produto {
     @Column(length = 500)
     private String descricao;
     
-    private float valor;
+    private double valor;
 
 }

@@ -31,7 +31,7 @@ public class CompraController {
             compraList = new ArrayList<>();
         }
         model.addAttribute("itens", compraList);
-        float total = 0;
+        double total = 0;
         for(ItemCompra item: compraList){
             total += item.getValorUnit() * item.getQnt();
         }
@@ -126,9 +126,9 @@ public class CompraController {
         pagamento.setCartao(cartaoService.findById(id));
         List<ItemCompra> itens = (List<ItemCompra>) session.getAttribute("listaProdutos");
         if(itens != null){
-            float total = 0;
+            double total = 0;
             for( ItemCompra item: itens){
-                total += (float) (item.getValorUnit() * item.getQnt());
+                total += item.getValorUnit() * item.getQnt();
             }
             pagamento.setValor(total);
 
@@ -139,13 +139,16 @@ public class CompraController {
     }
 
     @GetMapping("/carrinho/finalizarCompra")
-    public String finalizarCompra(HttpSession session , @RequestBody List<Pagamento> pagamentos){
+    public String finalizarCompra(HttpSession session){
         Pedido pedido = new Pedido();
         pedido.setItens((List<ItemCompra>) session.getAttribute("listaProdutos"));
         pedido.setPagamentoList((List<Pagamento>) session.getAttribute("cartoes"));
         pedido.setEnderecoEntrega((Endereco) session.getAttribute("enderecoEntrega"));
-        pedidoService.salvarPedido(pedido);
-        return "Pedidos";
+        pedidoService.salvarNovoPedido(pedido);
+        session.removeAttribute("listaProdutos");
+        session.removeAttribute("cartoes");
+        session.removeAttribute("enderecoEntrega");
+        return "redirect:/cliente/pedidos";
     }
 
 

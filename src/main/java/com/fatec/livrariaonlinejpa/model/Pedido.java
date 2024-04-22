@@ -1,5 +1,6 @@
 package com.fatec.livrariaonlinejpa.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,4 +22,6 @@ public class Pedido {
     @ManyToOne
     private Cliente cliente;
     private String status;
+    private LocalDate data;
+    private double total;
 }
