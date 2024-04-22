@@ -37,103 +37,20 @@
 
 	<div class="container mt-5">
 		<br><br>
-		<div class="row">
-			<div class="col">
+		<div class="card-deck" th:each="produto : ${produtoList}">
+			<div class="col-md-4 mt-4">
 				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
+					<a th:href="@{'/produto/' + ${produto.getId()}}"><img th:src="@{${produto.getPathImg()}}" class="card-img-top" alt=""></a>
 					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
+						<h5 th:text="${produto.getNome()}"></h5>
+						<p th:text="${#numbers.formatCurrency(produto.getValor())}"></p>
+						<form>
+							<input type="hidden" th:field="${item.id}" th:value="${produto.getId()}">
+							<input type="hidden" th:field="${item.qnt}" value="1">
+							<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
+								Adicionar ao carrinho
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -148,6 +65,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
 		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
 		crossorigin="anonymous"></script>
+
 </body>
 
 </html>

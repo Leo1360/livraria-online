@@ -141,6 +141,8 @@ public class CompraController {
     @GetMapping("/carrinho/finalizarCompra")
     public String finalizarCompra(HttpSession session){
         Pedido pedido = new Pedido();
+        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
+        pedido.setCliente(cliente);
         pedido.setItens((List<ItemCompra>) session.getAttribute("listaProdutos"));
         pedido.setPagamentoList((List<Pagamento>) session.getAttribute("cartoes"));
         pedido.setEnderecoEntrega((Endereco) session.getAttribute("enderecoEntrega"));
@@ -150,7 +152,6 @@ public class CompraController {
         session.removeAttribute("enderecoEntrega");
         return "redirect:/cliente/pedidos";
     }
-
 
 
     @GetMapping("/produto/{id}")

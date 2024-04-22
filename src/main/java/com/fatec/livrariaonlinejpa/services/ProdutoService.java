@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProdutoService {
@@ -24,5 +27,13 @@ public class ProdutoService {
     public void update(Produto prod){
         findById(prod.getId());
         repo.save(prod);
+    }
+
+    public List<Produto> pesquisar(String query){
+        List<Produto> produtoList = repo.findByNomeOrDescricao(query.toLowerCase());
+        if(produtoList == null){
+            produtoList = new ArrayList<>();
+        }
+        return produtoList;
     }
 }
