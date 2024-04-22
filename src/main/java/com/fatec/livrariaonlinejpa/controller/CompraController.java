@@ -26,6 +26,47 @@ public class CompraController {
     private final ProdutoService produtoService;
     private final ClienteService clienteService;
 
+    @GetMapping("/carrinho/show")
+    public String getCarrinho(HttpSession session, Model model){
+        List<ItemCompra> compraList = (List<ItemCompra>) session.getAttribute("listaProdutos");
+        if(compraList == null){
+            compraList = new ArrayList<>();
+        }
+        model.addAttribute("itens", compraList);
+        float total = 0;
+        for(ItemCompra item: compraList){
+            total += item.getValorUnit() * item.getQnt();
+        }
+        model.addAttribute("total",total);
+
+        Endereco endereco = (Endereco) session.getAttribute("enderecoEntrega");
+        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
+        if(endereco == null ){
+            endereco = cliente.getEnderecosEntrega().stream().filter(Endereco::isPreferencial).findFirst().orElse(cliente.getEnderecosEntrega().get(0));
+        }
+        model.addAttribute("endereco",endereco);
+
+        List<Pagamento> pagamentos = ((List<Pagamento>) session.getAttribute("cartoes"));
+        Pagamento pag =  new Pagamento();
+        if(pagamentos == null){
+            pag.setCartao(cliente.getCartoes().get(0));
+            pag.setValor(total);
+        }else{
+            pag = pagamentos.get(0);
+        }
+        model.addAttribute("pagamento", pag);
+
+        return "compra/carrinho";
+    }
+
+    @GetMapping("/carrinho/selecionarEndereco")
+    public String selecionarEndereco(HttpSession session, Model model){
+        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
+        model.addAttribute("enderecos",cliente.getEnderecosEntrega());
+        return "/compra/selecionar_endereco";
+    }
+
+
     @PostMapping("/carrinho/addItem")
     public String addItemCarrinho(HttpSession session , @ModelAttribute("newItem") AddCarrinhoItemDTO itemDto) {
         ItemCompra novoItem = itemDto.toItem(produtoService);
@@ -66,17 +107,17 @@ public class CompraController {
         return "redirect:/carrinho/show";
     }
 
-    @PostMapping("/carrinho/setEndereco")
-    public String setEndereco(HttpSession session ,@RequestBody long enderecoId){
+    @GetMapping("/carrinho/setEndereco/{enderecoId}")
+    public String setEndereco(HttpSession session ,@PathVariable long enderecoId){
         Endereco endereco = enderecoService.findById(enderecoId);
         session.setAttribute("enderecoEntrega",endereco);
-        return "Selecionar Cartão";
+        return "redirect:/carrinho/show";
     }
 
     @PostMapping("/carrinho/setCartoes")
     public String setCartoes(HttpSession session , @RequestBody List<Pagamento> pagamentos){
         session.setAttribute("cartoes",pagamentos);
-        return "conferir compra";
+        return "redirect:/carrinho/show";
     }
 
     @GetMapping("/carrinho/finalizarCompra")
@@ -89,35 +130,7 @@ public class CompraController {
         return "Pedidos";
     }
 
-    @GetMapping("/carrinho/show")
-    public String getCarrinho(HttpSession session, Model model){
-        model.addAttribute("itens", (List<ItemCompra>) session.getAttribute("listaProdutos"));
-        List<ItemCompra> compraList = (List<ItemCompra>) session.getAttribute("listaProdutos");
-        float total = 0;
-        for(ItemCompra item: compraList){
-            total += item.getValorUnit() * item.getQnt();
-        }
-        model.addAttribute("total",total);
 
-        Endereco endereco = (Endereco) session.getAttribute("enderecoEntrega");
-        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
-        if(endereco == null ){
-            endereco = cliente.getEnderecosEntrega().stream().filter(Endereco::isPreferencial).findFirst().orElse(cliente.getEnderecosEntrega().get(0));
-        }
-        model.addAttribute("endereco",endereco);
-
-        List<Pagamento> pagamentos = ((List<Pagamento>) session.getAttribute("cartoes"));
-        Pagamento pag =  new Pagamento();
-        if(pagamentos == null){
-            pag.setCartao(cliente.getCartoes().get(0));
-            pag.setValor(total);
-        }else{
-            pag = pagamentos.get(0);
-        }
-        model.addAttribute("pagamento", pag);
-
-        return "compra/carrinho";
-    }
 
     @GetMapping("/produto/{id}")
     public String getProduto(HttpSession session, Model model, @PathVariable long id){

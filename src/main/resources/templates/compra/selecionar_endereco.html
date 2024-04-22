@@ -39,48 +39,22 @@
                 <a href="" class="btn" role="button" style="background-color: rgb(28, 71, 101); color: white;">+</a>
             </div>
         </div>
-        <br>
+    </div>
+    <div class="container mt-5" th:each="endereco: ${enderecos}">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                Rua dos bobos
-                <a href="carrinho.html" class="btn" role="button"
+                <p th:text="${endereco.getLogradouro()}"></p>
+                <a th:href="@{'/carrinho/setEndereco/' + ${endereco.getId()}}" class="btn" role="button"
                     style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
             </div>
             <div class="card-body">
-                <p>Nº: 0</p>
-                <p>Bairro: Bom Retiro</p>
-                <p>Cidade: São Paulo</p>
-                <p>UF: SP</p>
+                <p th:text="${'Nº:' + endereco.getNumero()}"></p>
+                <p th:text="${'Bairro: ' + endereco.getBairro()}"></p>
+                <p th:text="${'Cidade: ' + endereco.getCidade().getNome()}"></p>
+                <p th:text="${'UF: ' + endereco.getCidade().getUf()}"></p>
             </div>
         </div>
         <br>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                Rua dos bobos
-                <a href="" class="btn" role="button"
-                    style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
-            </div>
-            <div class="card-body">
-                <p>Nº: 0</p>
-                <p>Bairro: Bom Retiro</p>
-                <p>Cidade: São Paulo</p>
-                <p>UF: SP</p>
-            </div>
-        </div>
-        <br>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                Rua dos bobos
-                <a href="" class="btn" role="button"
-                    style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
-            </div>
-            <div class="card-body">
-                <p>Nº: 0</p>
-                <p>Bairro: Bom Retiro</p>
-                <p>Cidade: São Paulo</p>
-                <p>UF: SP</p>
-            </div>
-        </div>
     </div>
 </body>
 
