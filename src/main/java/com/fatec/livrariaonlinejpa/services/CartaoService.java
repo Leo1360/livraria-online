@@ -30,6 +30,12 @@ public class CartaoService {
         repo.save(antigoCartao);
     }
 
+    public void setPreferencial(long id,boolean isPreferencial){
+        Cartao antigoCartao = findById(id);
+        antigoCartao.setPreferencial(isPreferencial);
+        repo.save(antigoCartao);
+    }
+
     public void delete(long id){
         if (!repo.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Endereço não encontrado");

@@ -10,8 +10,8 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light justify-content-between"
 		style="background-color: rgb(28, 71, 101);">
-		<a class="navbar-brand" href="home.html" style="color: white;">Livraria Online</a>
-		<form id="formBusca" action="pesquisa.html" method="get" class="navbar-form" style="width: 50%;">
+		<a class="navbar-brand" href="/home" style="color: white;">Livraria Online</a>
+		<form id="formBusca" action="/find" method="get" class="navbar-form" style="width: 50%;">
 			<div class="input-group">
 				<input type="text" class="form-control" placeholder="Buscar ...">
 				<div class="input-group-btn">
@@ -24,10 +24,10 @@
 		<div class="navbar-nav">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="carrinho.html" style="color: white;">Carrinho</a>
+					<a class="nav-link" href="/carrinho/show" style="color: white;">Carrinho</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="perfil.html" style="color: white;">Perfil</a>
+					<a class="nav-link" href="/cliente/perfil" style="color: white;">Perfil</a>
 				</li>
 			</ul>
 		</div>
@@ -42,31 +42,17 @@
 							<th>Item</th>
 							<th>Total Item</th>
 							<th>Valor unit</th>
-							<th>Total</th>
+							<th></th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody th:each="item : ${itens}">
 						<tr>
-							<td style="width: min-content;"><input type="number" style="width: 70%;" value="1"
-									onstalled="console.log('aaaa')"></td>
-							<td>Livro XYZ</td>
-							<td>R$ 3,00</td>
-							<td>R$ 3,00</td>
-							<td>R$ 14,00</td>
-						</tr>
-						<tr>
-							<td style="width: min-content;"><input type="number" style="width: 70%;" value="1"></td>
-							<td>Livro XYZ</td>
-							<td>R$ 3,00</td>
-							<td>R$ 6,00</td>
-							<td>R$ 3,00</td>
-						</tr>
-						<tr>
-							<td style="width: min-content;"><input type="number" style="width: 70%;" value="1"></td>
-							<td>Livro XYZ</td>
-							<td>R$ 3,00</td>
-							<td>R$ 3,00</td>
-							<td>R$ 14,00</td>
+							<td><a th:href="@{'/carrinho/removeItem/' + ${item.getProduto().getId()}}"><button>Remover</button></a></td>
+							<td style="width: min-content;"><input type="number" style="width: 70%;" th:value="${item.qnt}"
+									onstalled="console.log('aaaa')" min="1"></td>
+							<td th:text="${item.getProduto().nome}"></td>
+							<td th:text="${#numbers.formatCurrency(item.getValorUnit())}"></td>
+							<td th:text="${#numbers.formatCurrency(item.getValorUnit() * item.qnt)}"></td>
 						</tr>
 					</tbody>
 				</table>
@@ -75,12 +61,12 @@
 						<div class="card">
 							<div class="card-header">Endereço entrega</div>
 							<div class="card-body">
-								<p>Logradouro: Rua dos bobos</p>
-								<p>Numero: 0</p>
-								<p>Bairro: Bom Retiro</p>
-								<p>Cidade: São Paulo</p>
-								<p>UF: SP</p>
-								<a href="selecionar_endereco.html" class="btn" role="button"
+								<p th:text="${'Logradouro: ' + endereco.getLogradouro()}"></p>
+								<p th:text="${'Numero: ' + endereco.getNumero()}"></p>
+								<p th:text="${'Bairro: ' + endereco.getBairro()}"></p>
+								<p th:text="${'Cidade: ' + endereco.getCidade().getNome()}"></p>
+								<p th:text="${'UF: ' + endereco.getCidade().getUf()}"></p>
+								<a href="/carrinho/selecionarEndereco" class="btn" role="button"
 									style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
 							</div>
 						</div>
@@ -90,10 +76,9 @@
 							<div class="card-header">Cartões</div>
 							<div class="card-body">
 								<div class="card">
-									<div class="card-header">
-										*********1234 - MasterCard
+									<div class="card-header" th:text="${pagamento.getCartao().getDigitos()}">
 									</div>
-									<a href="selecionar_cartao.html" class="btn" role="button"
+									<a href="/carrinho/selecionarCartao" class="btn" role="button"
 										style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
 								</div>
 
@@ -119,7 +104,7 @@
 						<div id="resumo">
 							<div class="row">
 								<div class="col">SubTotal</div>
-								<div id="subtotal" class="col">R$ 12,00</div>
+								<div id="subtotal" class="col" th:text="${total}"></div>
 							</div>
 							<div class="row">
 								<div class="col">Frete</div>
@@ -130,14 +115,15 @@
 						<hr style="background-color: rgb(128, 137, 147);">
 						<div class="row">
 							<div class="col">Total</div>
-							<div id="total" class="col">R$ 14,00</div>
+							<div id="total" class="col" th:text="${total}"></div>
 						</div>
-						<button class="btn btn-block mt-3"
-							style="background-color: rgb(28, 71, 101); color: white;">Finalizar</button>
+						<a href="/carrinho/finalizarCompra"><button class="btn btn-block mt-3"
+							style="background-color: rgb(28, 71, 101); color: white;">Finalizar</button></a>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
 		<script>
 			var values = [12, 2]
 			function addCupom(cupom) {

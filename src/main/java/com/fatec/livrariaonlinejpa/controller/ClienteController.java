@@ -4,8 +4,10 @@ package com.fatec.livrariaonlinejpa.controller;
 import com.fatec.livrariaonlinejpa.model.Cartao;
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.model.Endereco;
+import com.fatec.livrariaonlinejpa.model.Pedido;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 
+import com.fatec.livrariaonlinejpa.services.PedidoService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
+import java.util.List;
 
 
 @Controller
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class ClienteController {
     private final ClienteService clienteService;
+    private final PedidoService pedidoService;
 
     @GetMapping("/setSession/{id}")
     public String getMethodName(HttpSession session,@PathVariable long id) {
@@ -44,7 +47,7 @@ public class ClienteController {
         }
         Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("listCartoes", cliente.getCartoes());
-        return "cartoes";
+        return "cliente/cartoes";
     }
     
     @GetMapping("/endereco")
@@ -54,14 +57,18 @@ public class ClienteController {
         }
         Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("listEndereco", cliente.getEnderecosEntrega());
-        return "enderecos";
+        return "cliente/enderecos";
     }
 
     @GetMapping("/perfil")
     public String mostrarCliente(HttpSession session,Model model) {
-        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
+        if(session.getAttribute("clienteId") == null ){
+            return "redirect:/cliente/novo";
+        }
+        long clientId = (long)session.getAttribute("clienteId");
+        Cliente cliente = clienteService.findById(clientId);
         model.addAttribute("cliente", cliente);
-        return "perfil";
+        return "/cliente/perfil";
     }
 
 
@@ -71,14 +78,14 @@ public class ClienteController {
     public String novocliente(HttpSession session,Model model) {
         Cliente cliente = new Cliente();
         model.addAttribute("cliente", cliente);
-        return "cadastro";
+        return "cliente/cadastro";
     }
 
     @GetMapping("/editar")
     public String editarCliente(HttpSession session, Model model){
         Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
         model.addAttribute("cliente", cliente);
-        return "editar_cliente";
+        return "cliente/editar_cliente";
     }
 
     @GetMapping("/cadastrarcartao")
@@ -86,7 +93,7 @@ public class ClienteController {
         Cartao cartao = new Cartao();
         model.addAttribute("cartao", cartao);
         model.addAttribute("onEdit", onEdit);
-        return "cadastrar_cartao";
+        return "cliente/cadastrar_cartao";
     }
 
     @GetMapping("/cadastrarendereco")
@@ -94,10 +101,18 @@ public class ClienteController {
         Endereco endereco =  new Endereco();
         model.addAttribute("endereco", endereco);
         model.addAttribute("onEdit", onEdit);
-        return "cadastrar_endereco";
+        return "cliente/cadastrar_endereco";
     }
 
-    
+
+    @GetMapping("/pedidos")
+    public String listPedidosCliente(HttpSession session,Model model){
+        long id = (Long) session.getAttribute("clienteId");
+        List<Pedido> pedidos = pedidoService.listarPedidosByCliente(id);
+        model.addAttribute("pedidos", pedidos);
+        return "/cliente/pedidos";
+    }
+
 
     // --------------------create----------------------------
 
@@ -161,6 +176,13 @@ public class ClienteController {
         session.removeAttribute("clienteId");
         return "redirect:/cliente/novo";
     }
-    
+
+    @GetMapping("/pedido/{id}")
+    public String getDetalhesPedido(HttpSession session,@PathVariable Long id, Model model){
+        Pedido pedido = pedidoService.findById(id);
+        model.addAttribute("pedido", pedido);
+        return "/cliente/pedido";
+
+    }
 
 }

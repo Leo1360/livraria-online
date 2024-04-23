@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClienteService {
     private final  ClienteRepository repo;
-    
+    private final CartaoService cartaoService;
 
     public Cliente save(Cliente cliente){
         cliente = repo.save(cliente);
@@ -69,13 +69,13 @@ public class ClienteService {
         Cliente cliente = this.findById(idCliente);
         for (Cartao c : cliente.getCartoes()) {
             if (c.getId() == idCartao) {
-                c.setPreferencial(true);
+                cartaoService.setPreferencial(c.getId(), true);
             }else{
-               c.setPreferencial(false);  
+                cartaoService.setPreferencial(c.getId(), false);
             }
             
         }
-        save(cliente);
+        //save(cliente);
     }
 
     public void update(Cliente newCliente){

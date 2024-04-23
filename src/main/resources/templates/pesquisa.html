@@ -10,8 +10,8 @@
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light justify-content-between"
 		style="background-color: rgb(28, 71, 101);">
-		<a class="navbar-brand" href="home.html" style="color: white;">Livraria Online</a>
-		<form id="formBusca" action="pesquisa.html" method="get" class="navbar-form" style="width: 50%;">
+		<a class="navbar-brand" href="/home" style="color: white;">Livraria Online</a>
+		<form id="formBusca" action="/find" method="get" class="navbar-form" style="width: 50%;">
 			<div class="input-group">
 				<input type="text" class="form-control" placeholder="Buscar ...">
 				<div class="input-group-btn">
@@ -24,10 +24,10 @@
 		<div class="navbar-nav">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item">
-					<a class="nav-link" href="carrinho.html" style="color: white;">Carrinho</a>
+					<a class="nav-link" href="/carrinho/show" style="color: white;">Carrinho</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="perfil.html" style="color: white;">Perfil</a>
+					<a class="nav-link" href="/cliente/perfil" style="color: white;">Perfil</a>
 				</li>
 			</ul>
 		</div>
@@ -37,103 +37,20 @@
 
 	<div class="container mt-5">
 		<br><br>
-		<div class="row">
-			<div class="col">
+		<div class="card-deck" th:each="produto : ${produtoList}">
+			<div class="col-md-4 mt-4">
 				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
+					<a th:href="@{'/produto/' + ${produto.getId()}}"><img th:src="@{${produto.getPathImg()}}" class="card-img-top" alt=""></a>
 					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card">
-					<a href="produto.html"><img src="/img/livros/Neuromancer.jpeg" class="card-img-top" alt=""></a>
-					<div class="card-body">
-						<h5>Livro A</h5>
-						<p>R$10,00</p>
-						<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
-							Adicionar ao carrinho
-						</button>
+						<h5 th:text="${produto.getNome()}"></h5>
+						<p th:text="${#numbers.formatCurrency(produto.getValor())}"></p>
+						<form>
+							<input type="hidden" th:field="${item.id}" th:value="${produto.getId()}">
+							<input type="hidden" th:field="${item.qnt}" value="1">
+							<button type="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
+								Adicionar ao carrinho
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -148,6 +65,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
 		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
 		crossorigin="anonymous"></script>
+
 </body>
 
 </html>
