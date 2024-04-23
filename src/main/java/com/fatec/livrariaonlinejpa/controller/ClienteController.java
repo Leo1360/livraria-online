@@ -62,9 +62,13 @@ public class ClienteController {
 
     @GetMapping("/perfil")
     public String mostrarCliente(HttpSession session,Model model) {
-        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
+        if(session.getAttribute("clienteId") == null ){
+            return "redirect:/cliente/novo";
+        }
+        long clientId = (long)session.getAttribute("clienteId");
+        Cliente cliente = clienteService.findById(clientId);
         model.addAttribute("cliente", cliente);
-        return "cliente/perfil";
+        return "/cliente/perfil";
     }
 
 
