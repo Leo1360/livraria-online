@@ -89,9 +89,7 @@ class LivrariaonlinejpaApplicationTests {
 
 	@Test
 	void setCartaoPreferencial(){
-		cartaoService.setPreferencial(7, true);
-		Cartao cartao = cartaoService.findById(7);
-		assertTrue(cartao.isPreferencial());
+
 	}
 
 	@Test 

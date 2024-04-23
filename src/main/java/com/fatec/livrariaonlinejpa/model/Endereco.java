@@ -19,7 +19,6 @@ public class Endereco{
     private String complemento;
     private String bairro;
     private String cep;
-    private boolean preferencial;
     @ManyToOne(cascade = CascadeType.ALL)
     private Cidade cidade;
 }

@@ -3,6 +3,7 @@ package com.fatec.livrariaonlinejpa.services;
 
 import java.util.Optional;
 
+import com.fatec.livrariaonlinejpa.repositories.CartaoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClienteService {
     private final  ClienteRepository repo;
-    private final CartaoService cartaoService;
+    private final CartaoRepository cartaoRepository;
 
     public Cliente save(Cliente cliente){
         cliente = repo.save(cliente);
@@ -67,15 +68,9 @@ public class ClienteService {
 
     public void setCartaoPreferencial(long idCliente, long idCartao){
         Cliente cliente = this.findById(idCliente);
-        for (Cartao c : cliente.getCartoes()) {
-            if (c.getId() == idCartao) {
-                cartaoService.setPreferencial(c.getId(), true);
-            }else{
-                cartaoService.setPreferencial(c.getId(), false);
-            }
-            
-        }
-        //save(cliente);
+        Cartao cartao = cartaoRepository.getReferenceById(idCartao);
+        cliente.setCartaoPreferencial(cartao);
+        save(cliente);
     }
 
     public void update(Cliente newCliente){

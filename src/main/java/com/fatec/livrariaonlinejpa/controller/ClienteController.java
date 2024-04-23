@@ -5,6 +5,7 @@ import com.fatec.livrariaonlinejpa.model.Cartao;
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.model.Endereco;
 import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.services.CartaoService;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 
 import com.fatec.livrariaonlinejpa.services.PedidoService;
@@ -31,7 +32,10 @@ import java.util.List;
 public class ClienteController {
     private final ClienteService clienteService;
     private final PedidoService pedidoService;
+    private final CartaoService cartaoService;
 
+
+    //TODO: separar a parte de cadastro em um controller especificos (CadastroController)
     @GetMapping("/setSession/{id}")
     public String getMethodName(HttpSession session,@PathVariable long id) {
         session.setAttribute("clienteId", id);
@@ -128,17 +132,21 @@ public class ClienteController {
     @PostMapping("/addCartao")
     public String addCartao(HttpSession session, @ModelAttribute("cartao") Cartao cartao, @RequestParam(name = "onEdit", required = false) String onEdit) {
         // salvando cliente
-        clienteService.addCartao((long)session.getAttribute("clienteId"),cartao);
+        //TODO: fazer o salvamento do cartão a parte e depois relacionar com o cliente usando repo.getReferenceById()
+        long clientid = (long)session.getAttribute("clienteId");
+        clienteService.addCartao(clientid,cartao);
         // salvando id do cliente na sessão
         if(onEdit != null){
             return "redirect:/cliente/cartoes";
         }
+        clienteService.setCartaoPreferencial(clientid, cartao.getId());
         return "redirect:/cliente/cadastrarendereco";
     }
     
     @PostMapping("/addEndereco")
     public String addEndereco(HttpSession session, @ModelAttribute("endereco") Endereco endereco, @RequestParam(required=false, name = "onEdit") String onEdit) {
         // salvando cliente
+        //TODO: fazer o salvamento do endereco a parte e depois relacionar usando o repo.getReferenceById()
         clienteService.addEnderecoEntrega((long)session.getAttribute("clienteId"),endereco);
         // salvando id do cliente na sessão
         if (onEdit != null) {

@@ -40,14 +40,14 @@ public class CompraController {
         Endereco endereco = (Endereco) session.getAttribute("enderecoEntrega");
         Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
         if(endereco == null ){
-            endereco = cliente.getEnderecosEntrega().stream().filter(Endereco::isPreferencial).findFirst().orElse(cliente.getEnderecosEntrega().get(0));
+            endereco = cliente.getEnderecoPreferencial();
         }
         model.addAttribute("endereco",endereco);
 
         List<Pagamento> pagamentos = ((List<Pagamento>) session.getAttribute("cartoes"));
         Pagamento pag =  new Pagamento();
         if(pagamentos == null){
-            pag.setCartao(cliente.getCartoes().get(0));
+            pag.setCartao(cliente.getCartaoPreferencial());
             pag.setValor(total);
         }else{
             pag = pagamentos.get(0);
