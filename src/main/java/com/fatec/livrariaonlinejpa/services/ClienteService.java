@@ -32,9 +32,9 @@ public class ClienteService {
     }
 
     public void addEnderecoEntrega(long idCliente, Endereco enderecoEntrega){
-        Cliente cliente = this.findById(idCliente);
+        Cliente cliente = repo.getReferenceById(idCliente);
         cliente.getEnderecosEntrega().add(enderecoEntrega);
-        save(cliente);
+        repo.save(cliente);
     }
 
     public void removeEnderecoEntrega(long idCliente, long idEndereco) {
@@ -50,9 +50,9 @@ public class ClienteService {
     
 
     public void addCartao(long idCliente, Cartao cartao){
-        Cliente cliente = findById(idCliente);
+        Cliente cliente = repo.getReferenceById(idCliente);
         cliente.getCartoes().add(cartao);
-        save(cliente);
+        repo.save(cliente);
     }
 
     public void removeCartao(long idCliente, long idCartao){

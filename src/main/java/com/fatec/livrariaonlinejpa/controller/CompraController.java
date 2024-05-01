@@ -74,6 +74,8 @@ public class CompraController {
 
     @PostMapping("/carrinho/addItem")
     public String addItemCarrinho(HttpSession session , @ModelAttribute("newItem") AddCarrinhoItemDTO itemDto) {
+        Pedido pedido = new Pedido();
+
         ItemCompra novoItem = itemDto.toItem(produtoService);
         List<ItemCompra> itens = (List<ItemCompra>) session.getAttribute("listaProdutos");
         boolean find = false;

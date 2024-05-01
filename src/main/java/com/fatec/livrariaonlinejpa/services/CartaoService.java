@@ -20,6 +20,10 @@ public class CartaoService {
 
     }
 
+    public Cartao save(Cartao cartao){
+        return repo.save(cartao);
+    }
+
     public void update(Cartao novoCartao){
         Cartao antigoCartao = findById(novoCartao.getId());
         if(novoCartao.getCpf().isBlank()){antigoCartao.setCpf(novoCartao.getCpf());}

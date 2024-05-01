@@ -16,11 +16,11 @@ import lombok.RequiredArgsConstructor;
 public class EnderecoService {
 private final EnderecoRepository repo;
 
-    public void save(Endereco endereco){
-        repo.save(endereco);
+    public Endereco save(Endereco endereco){
+        return repo.save(endereco);
     }
 
-    public void update(Endereco novoEndereco){
+    public Endereco update(Endereco novoEndereco){
         Endereco antigoEndereco = findById(novoEndereco.getId());
         // Mergin updated fields (if any field is blank , the old value remains)
         if(!novoEndereco.getLogradouro().isBlank()){antigoEndereco.setLogradouro(novoEndereco.getLogradouro());}
@@ -31,7 +31,7 @@ private final EnderecoRepository repo;
         if(!novoEndereco.getCidade().getNome().isBlank()){antigoEndereco.getCidade().setNome(novoEndereco.getCidade().getNome());}
         if(!novoEndereco.getCidade().getUf().isBlank()){antigoEndereco.getCidade().setUf(novoEndereco.getCidade().getUf());}
 
-        repo.save(antigoEndereco);
+        return repo.save(antigoEndereco);
     }
 
     public  Endereco findById(long id){

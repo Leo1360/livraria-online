@@ -32,10 +32,8 @@ import java.util.List;
 public class ClienteController {
     private final ClienteService clienteService;
     private final PedidoService pedidoService;
-    private final CartaoService cartaoService;
 
 
-    //TODO: separar a parte de cadastro em um controller especificos (CadastroController)
     @GetMapping("/setSession/{id}")
     public String getMethodName(HttpSession session,@PathVariable long id) {
         session.setAttribute("clienteId", id);
@@ -108,7 +106,6 @@ public class ClienteController {
         return "cliente/cadastrar_endereco";
     }
 
-
     @GetMapping("/pedidos")
     public String listPedidosCliente(HttpSession session,Model model){
         long id = (Long) session.getAttribute("clienteId");
@@ -132,7 +129,6 @@ public class ClienteController {
     @PostMapping("/addCartao")
     public String addCartao(HttpSession session, @ModelAttribute("cartao") Cartao cartao, @RequestParam(name = "onEdit", required = false) String onEdit) {
         // salvando cliente
-        //TODO: fazer o salvamento do cartão a parte e depois relacionar com o cliente usando repo.getReferenceById()
         long clientid = (long)session.getAttribute("clienteId");
         clienteService.addCartao(clientid,cartao);
         // salvando id do cliente na sessão
@@ -146,7 +142,6 @@ public class ClienteController {
     @PostMapping("/addEndereco")
     public String addEndereco(HttpSession session, @ModelAttribute("endereco") Endereco endereco, @RequestParam(required=false, name = "onEdit") String onEdit) {
         // salvando cliente
-        //TODO: fazer o salvamento do endereco a parte e depois relacionar usando o repo.getReferenceById()
         clienteService.addEnderecoEntrega((long)session.getAttribute("clienteId"),endereco);
         // salvando id do cliente na sessão
         if (onEdit != null) {
