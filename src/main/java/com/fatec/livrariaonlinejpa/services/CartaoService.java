@@ -20,6 +20,10 @@ public class CartaoService {
 
     }
 
+    public Cartao save(Cartao cartao){
+        return repo.save(cartao);
+    }
+
     public void update(Cartao novoCartao){
         Cartao antigoCartao = findById(novoCartao.getId());
         if(novoCartao.getCpf().isBlank()){antigoCartao.setCpf(novoCartao.getCpf());}
@@ -27,12 +31,6 @@ public class CartaoService {
         if(novoCartao.getDigitos().isBlank()){antigoCartao.setDigitos(novoCartao.getDigitos());}
         if(novoCartao.getVencimento().isBlank()){antigoCartao.setVencimento(novoCartao.getVencimento());}
 
-        repo.save(antigoCartao);
-    }
-
-    public void setPreferencial(long id,boolean isPreferencial){
-        Cartao antigoCartao = findById(id);
-        antigoCartao.setPreferencial(isPreferencial);
         repo.save(antigoCartao);
     }
 

@@ -16,5 +16,4 @@ public class Cartao{
     private String cvv;
     private String vencimento;
     private String cpf;
-    private boolean preferencial;
 }

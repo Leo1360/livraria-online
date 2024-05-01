@@ -5,6 +5,7 @@ import com.fatec.livrariaonlinejpa.model.Cartao;
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.model.Endereco;
 import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.services.CartaoService;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 
 import com.fatec.livrariaonlinejpa.services.PedidoService;
@@ -31,6 +32,7 @@ import java.util.List;
 public class ClienteController {
     private final ClienteService clienteService;
     private final PedidoService pedidoService;
+
 
     @GetMapping("/setSession/{id}")
     public String getMethodName(HttpSession session,@PathVariable long id) {
@@ -104,7 +106,6 @@ public class ClienteController {
         return "cliente/cadastrar_endereco";
     }
 
-
     @GetMapping("/pedidos")
     public String listPedidosCliente(HttpSession session,Model model){
         long id = (Long) session.getAttribute("clienteId");
@@ -128,11 +129,13 @@ public class ClienteController {
     @PostMapping("/addCartao")
     public String addCartao(HttpSession session, @ModelAttribute("cartao") Cartao cartao, @RequestParam(name = "onEdit", required = false) String onEdit) {
         // salvando cliente
-        clienteService.addCartao((long)session.getAttribute("clienteId"),cartao);
+        long clientid = (long)session.getAttribute("clienteId");
+        clienteService.addCartao(clientid,cartao);
         // salvando id do cliente na sessão
         if(onEdit != null){
             return "redirect:/cliente/cartoes";
         }
+        clienteService.setCartaoPreferencial(clientid, cartao.getId());
         return "redirect:/cliente/cadastrarendereco";
     }
     
