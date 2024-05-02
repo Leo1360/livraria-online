@@ -45,12 +45,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <p th:text="${' Cartão: ' + cartao.getDigitos()}"></p>
-                <a th:href="@{'/carrinho/setCartoes/' + ${cartao.getId()}}" class="btn" role="button"
+                <a th:href="@{'/carrinho/addCartao/' + ${cartao.getId()}}" class="btn" role="button"
                     style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
             </div>
         </div>
-
     </div>
+
 </body>
 
 </html>
