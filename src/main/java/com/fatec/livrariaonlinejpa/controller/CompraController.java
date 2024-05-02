@@ -26,141 +26,178 @@ public class CompraController {
 
     @GetMapping("/carrinho/show")
     public String getCarrinho(HttpSession session, Model model){
-        List<ItemCompra> compraList = (List<ItemCompra>) session.getAttribute("listaProdutos");
-        if(compraList == null){
-            compraList = new ArrayList<>();
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        if(pedido == null){
+            pedido = new Pedido();
         }
-        model.addAttribute("itens", compraList);
-        double total = 0;
-        for(ItemCompra item: compraList){
-            total += item.getValorUnit() * item.getQnt();
-        }
-        model.addAttribute("total",total);
 
-        Endereco endereco = (Endereco) session.getAttribute("enderecoEntrega");
-        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
-        if(endereco == null ){
-            endereco = cliente.getEnderecoPreferencial();
+        if(pedido.getCliente() == null){
+            Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
+            pedido.setCliente(cliente);
         }
-        model.addAttribute("endereco",endereco);
 
-        List<Pagamento> pagamentos = ((List<Pagamento>) session.getAttribute("cartoes"));
-        Pagamento pag =  new Pagamento();
-        if(pagamentos == null){
-            pag.setCartao(cliente.getCartaoPreferencial());
-            pag.setValor(total);
+        if(pedido.getItens() == null){
+            pedido.setItens(new ArrayList<>());
+        }
+        pedido.atualizarTotal();
+
+        if(pedido.getEnderecoEntrega() == null ){
+            pedido.setEnderecoEntrega(pedido.getCliente().getEnderecoPreferencial());
+        }
+
+        if(pedido.getPagamentoList().isEmpty()){
+            Pagamento pag =  new Pagamento();
+            pag.setCartao(pedido.getCliente().getCartaoPreferencial());
+            pag.setValor(pedido.getTotal());
+            pedido.addPagamento(pag);
         }else{
-            pag = pagamentos.get(0);
+            if(pedido.getPagamentoList().size() == 1){
+                pedido.getPagamentoList().get(0).setValor(pedido.getTotal());
+            }
         }
-        model.addAttribute("pagamento", pag);
 
+
+        session.setAttribute("pedido", pedido);
+        model.addAttribute("pedido",pedido);
         return "compra/carrinho";
     }
 
     @GetMapping("/carrinho/selecionarEndereco")
     public String selecionarEndereco(HttpSession session, Model model){
-        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
-        model.addAttribute("enderecos",cliente.getEnderecosEntrega());
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        model.addAttribute("enderecos",pedido.getCliente().getEnderecosEntrega());
         return "/compra/selecionar_endereco";
     }
 
     @GetMapping("/carrinho/selecionarCartao")
     public String selecionarCartao(HttpSession session, Model model){
-        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
-        model.addAttribute("cartoes",cliente.getCartoes());
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        model.addAttribute("cartoes",pedido.getCliente().getCartoes());
         return "/compra/selecionar_cartao";
     }
-
-
-    @PostMapping("/carrinho/addItem")
-    public String addItemCarrinho(HttpSession session , @ModelAttribute("newItem") AddCarrinhoItemDTO itemDto) {
-        Pedido pedido = new Pedido();
-
-        ItemCompra novoItem = itemDto.toItem(produtoService);
-        List<ItemCompra> itens = (List<ItemCompra>) session.getAttribute("listaProdutos");
-        boolean find = false;
-        if(itens == null){
-            itens = new ArrayList<>();
-            itens.add(novoItem);
-        }else{
-            for(ItemCompra item : itens){
-                if(item.getProduto().getId() == novoItem.getProduto().getId()){
-                    item.setQnt(novoItem.getQnt());
-                    find = true;
-                    break;
-                }
-            }
-            if(! find){
-                itens.add(novoItem);
-            }
-        }
-
-        session.setAttribute("listaProdutos", itens);
-        return "redirect:/carrinho/show";
-    }
-
-    @GetMapping("/carrinho/removeItem/{idProduto}")
-    public String removeItemCarrinho(HttpSession session ,@PathVariable long idProduto){
-        List<ItemCompra> itens = (List<ItemCompra>) session.getAttribute("listaProdutos");
-        ItemCompra itemRemove = null ;
-        for(ItemCompra item : itens){
-            if(item.getProduto().getId() == idProduto){
-                itemRemove = item;
-                break;
-            }
-        }
-        itens.remove(itemRemove);
-        session.setAttribute("listaProdutos", itens);
-        return "redirect:/carrinho/show";
-    }
-
-    @GetMapping("/carrinho/setEndereco/{enderecoId}")
-    public String setEndereco(HttpSession session ,@PathVariable long enderecoId){
-        Endereco endereco = enderecoService.findById(enderecoId);
-        session.setAttribute("enderecoEntrega",endereco);
-        return "redirect:/carrinho/show";
-    }
-
-    @GetMapping("/carrinho/setCartoes/{id}")
-    public String setCartoes(HttpSession session , @PathVariable long id){
-        List<Pagamento> pagamentoList = new ArrayList<>();
-        Pagamento pagamento = new Pagamento();
-        pagamento.setCartao(cartaoService.findById(id));
-        List<ItemCompra> itens = (List<ItemCompra>) session.getAttribute("listaProdutos");
-        if(itens != null){
-            double total = 0;
-            for( ItemCompra item: itens){
-                total += item.getValorUnit() * item.getQnt();
-            }
-            pagamento.setValor(total);
-
-        }
-        pagamentoList.add(pagamento);
-        session.setAttribute("cartoes",pagamentoList);
-        return "redirect:/carrinho/show";
-    }
-
-    @GetMapping("/carrinho/finalizarCompra")
-    public String finalizarCompra(HttpSession session){
-        Pedido pedido = new Pedido();
-        Cliente cliente = clienteService.findById((Long) session.getAttribute("clienteId"));
-        pedido.setCliente(cliente);
-        pedido.setItens((List<ItemCompra>) session.getAttribute("listaProdutos"));
-        pedido.setPagamentoList((List<Pagamento>) session.getAttribute("cartoes"));
-        pedido.setEnderecoEntrega((Endereco) session.getAttribute("enderecoEntrega"));
-        pedidoService.salvarNovoPedido(pedido);
-        session.removeAttribute("listaProdutos");
-        session.removeAttribute("cartoes");
-        session.removeAttribute("enderecoEntrega");
-        return "redirect:/cliente/pedidos";
-    }
-
 
     @GetMapping("/produto/{id}")
     public String getProduto(HttpSession session, Model model, @PathVariable long id){
         model.addAttribute("produto",produtoService.findById(id));
         model.addAttribute("newItem",new AddCarrinhoItemDTO(id));
         return "produto";
+    }
+
+//-------------------------------------------------------------------------------------------
+
+    @PostMapping("/carrinho/addItem")
+    public String addItemCarrinho(HttpSession session , @ModelAttribute("newItem") AddCarrinhoItemDTO itemDto) {
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        if(pedido == null){
+            pedido = new Pedido();
+        }
+
+        ItemCompra novoItem = itemDto.toItem(produtoService);
+
+        boolean find = false;
+        for(ItemCompra item : pedido.getItens()){
+            if(item.getProduto().getId() == novoItem.getProduto().getId()){
+                item.setQnt(novoItem.getQnt());
+                find = true;
+                break;
+            }
+        }
+        if(! find){
+            pedido.addItem(novoItem);
+        }
+        pedido.atualizarTotal();
+
+        session.setAttribute("pedido", pedido);
+        return "redirect:/carrinho/show";
+    }
+
+    @GetMapping("/carrinho/removeItem/{idProduto}")
+    public String removeItemCarrinho(HttpSession session ,@PathVariable long idProduto){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+
+        ItemCompra itemExcluir = pedido.getItens().stream().filter(item -> item.getProduto().getId() == idProduto).findFirst().orElse(null);
+        if(itemExcluir != null){
+            pedido.getItens().remove(itemExcluir);
+            // TODO Verificar exclusão do item
+
+            session.setAttribute("pedido", pedido);
+        }
+
+        return "redirect:/carrinho/show";
+    }
+
+    @GetMapping("/carrinho/setEndereco/{enderecoId}")
+    public String setEndereco(HttpSession session ,@PathVariable long enderecoId){
+        Endereco endereco = enderecoService.findById(enderecoId);
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        pedido.setEnderecoEntrega(endereco);
+        return "redirect:/carrinho/show";
+    }
+
+    @GetMapping("/carrinho/addCartao/{id}")
+    public String setCartoes(HttpSession session , @PathVariable long id){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        boolean find = false;
+
+        for(Pagamento pag : pedido.getPagamentoList()){
+            if(pag.getCartao().getId() == id){
+                find = true;
+                break;
+            }
+        }
+
+        if(! find){
+            Pagamento pagamento = new Pagamento();
+            pagamento.setCartao(cartaoService.findById(id));
+
+            if(pedido.getPagamentoList().isEmpty()){
+                pagamento.setValor(pedido.getTotal());
+            }
+            pedido.addPagamento(pagamento);
+        }
+
+        session.setAttribute("pedido", pedido);
+        return "redirect:/carrinho/show";
+    }
+
+    @GetMapping("/carrinho/editarPagamento")
+    public String editPagamento(HttpSession session ,@RequestParam("id") long id, @RequestParam("valor") double valor ){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        for(Pagamento pagamento : pedido.getPagamentoList()){
+            if (pagamento.getCartao().getId() == id){
+                pagamento.setValor(valor);
+            }
+        }
+        session.setAttribute("pedido", pedido);
+        return "redirect:/carrinho/show";
+    }
+
+    @GetMapping("/carrinho/removerCartao/{id}")
+    public String removerCartao(HttpSession session ,@PathVariable long id){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        Pagamento pagamento = pedido.getPagamentoList().stream().filter(item -> item.getCartao().getId() == id).findFirst().orElse(null);
+        pedido.getPagamentoList().remove(pagamento);
+        session.setAttribute("pedido", pedido);
+        return "redirect:/carrinho/show";
+    }
+
+
+    @GetMapping("/carrinho/finalizarCompra")
+    public String finalizarCompra(HttpSession session){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+
+        pedidoService.salvarNovoPedido(pedido);
+        session.removeAttribute("enderecoEntrega");
+        return "redirect:/cliente/pedidos";
+    }
+
+    //--------------------------------------------------------------------------------
+    private boolean isLogged(HttpSession session){
+        return (boolean) session.getAttribute("isLogged");
+    }
+
+    private void setLoggin(HttpSession session, boolean isLogged){
+        session.setAttribute("isLogged", isLogged);
     }
 
 }

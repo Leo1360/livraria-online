@@ -45,7 +45,7 @@
 							<th></th>
 						</tr>
 					</thead>
-					<tbody th:each="item : ${itens}">
+					<tbody th:each="item : ${pedido.getItens()}">
 						<tr>
 							<td><a th:href="@{'/carrinho/removeItem/' + ${item.getProduto().getId()}}"><button>Remover</button></a></td>
 							<td style="width: min-content;"><input type="number" style="width: 70%;" th:value="${item.qnt}"
@@ -59,13 +59,16 @@
 				<div class="row">
 					<div class="col">
 						<div class="card">
-							<div class="card-header">Endereço entrega</div>
-							<div class="card-body" th:if="${endereco != null}">
-								<p th:text="${'Logradouro: ' + endereco.getLogradouro()}"></p>
-								<p th:text="${'Numero: ' + endereco.getNumero()}"></p>
-								<p th:text="${'Bairro: ' + endereco.getBairro()}"></p>
-								<p th:text="${'Cidade: ' + endereco.getCidade().getNome()}"></p>
-								<p th:text="${'UF: ' + endereco.getCidade().getUf()}"></p>
+							<div class="card-header d-flex justify-content-between align-items-center">
+								Endereço entrega
+								<a href="/carrinho/selecionarEndereco" role="button" class="btn" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-plus-circle"></i></a>
+							</div>
+							<div class="card-body" th:if="${pedido.getEnderecoEntrega() != null}">
+								<p th:text="${'Logradouro: ' + pedido.getEnderecoEntrega().getLogradouro()}"></p>
+								<p th:text="${'Numero: ' + pedido.getEnderecoEntrega().getNumero()}"></p>
+								<p th:text="${'Bairro: ' + pedido.getEnderecoEntrega().getBairro()}"></p>
+								<p th:text="${'Cidade: ' + pedido.getEnderecoEntrega().getCidade().getNome()}"></p>
+								<p th:text="${'UF: ' + pedido.getEnderecoEntrega().getCidade().getUf()}"></p>
 								<a href="/carrinho/selecionarEndereco" class="btn" role="button"
 									style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
 							</div>
@@ -73,21 +76,26 @@
 					</div>
 					<div class="col">
 						<div class="card">
-							<div class="card-header">Cartões</div>
-							<div class="card-body">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								Cartões
+								<a href="/carrinho/selecionarCartao" role="button" class="btn" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-plus-circle"></i></a>
+							</div>
+							<div class="card-body" th:each="pagamento:${pedido.getPagamentoList()}">
 								<div class="card">
 									<div class="card-header d-flex justify-content-between align-items-center">
 										<div th:text="${pagamento.getCartao().getDigitos()}">
 										</div>
 										<div>
 											<button th:attr="onclick=|editPagamento('${pagamento.getCartao().getId()}')|" class="btn" role="button" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-pencil"></i></button>
-											<a href="/removeCard" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;"><i class="bi bi-trash"></i></a>
+											<a th:href="@{'/carrinho/removerCartao/' + ${pagamento.getCartao().getId()} }" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;"><i class="bi bi-trash"></i></a>
 										</div>
 									</div>
 									<div class="card-body d-flex justify-content-between align-items-center">
-										<form action="/editPagamento">
+										<form action="/carrinho/editarPagamento">
+											<input type="hidden" name="id" id="id" th:value="${pagamento.getCartao().getId()}">
 											Valor:
-											<input autocomplete="off" th:id="${'cartao' + pagamento.getCartao().getId()}" type="number" step="0.01" disabled>
+											<input autocomplete="off" name="valor" th:id="${'cartao' + pagamento.getCartao().getId()}" type="number" step="0.01"
+												   th:value="${pagamento.getValor()}" disabled>
 											<button autocomplete="off" th:id="${'btnSave' + pagamento.getCartao().getId()}" type="submit" hidden class="btn" style="background-color: rgb(4, 152, 11); color: white;">OK</button>
 										</form>
 										<a href="" role="button" class="btn"></a>
@@ -117,7 +125,7 @@
 						<div id="resumo">
 							<div class="row">
 								<div class="col">SubTotal</div>
-								<div id="subtotal" class="col" th:text="${total}"></div>
+								<div id="subtotal" class="col" th:text="${pedido.getTotal()}"></div>
 							</div>
 							<div class="row">
 								<div class="col">Frete</div>
@@ -128,9 +136,9 @@
 						<hr style="background-color: rgb(128, 137, 147);">
 						<div class="row">
 							<div class="col">Total</div>
-							<div id="total" class="col" th:text="${total}"></div>
+							<div id="total" class="col" th:text="${pedido.getTotal()}"></div>
 						</div>
-						<a href="/carrinho/finalizarCompra"><button class="btn btn-block mt-3"
+						<a id="btnFinalizar" href="/carrinho/finalizarCompra"><button class="btn btn-block mt-3"
 							style="background-color: rgb(28, 71, 101); color: white;">Finalizar</button></a>
 					</div>
 				</div>
