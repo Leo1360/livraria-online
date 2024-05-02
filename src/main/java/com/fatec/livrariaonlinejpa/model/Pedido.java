@@ -24,6 +24,7 @@ public class Pedido {
     private String status;
     private LocalDate data;
     private double total;
+    private double frete;
 
 
 

@@ -2,6 +2,7 @@ package com.fatec.livrariaonlinejpa.services;
 
 import java.util.List;
 
+import com.fatec.livrariaonlinejpa.model.ItemCompra;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,6 +45,10 @@ private final EnderecoRepository repo;
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Endereço não encontrado");
         }
         repo.deleteById(id);
+    }
+
+    public double calcularFrete(Endereco endereco, List<ItemCompra> itens){
+        return itens.size() * 2.13;
     }
     
 

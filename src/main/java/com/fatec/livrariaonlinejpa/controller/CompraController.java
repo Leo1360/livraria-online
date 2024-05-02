@@ -43,16 +43,17 @@ public class CompraController {
 
         if(pedido.getEnderecoEntrega() == null ){
             pedido.setEnderecoEntrega(pedido.getCliente().getEnderecoPreferencial());
+            pedido.setFrete(enderecoService.calcularFrete(pedido.getEnderecoEntrega(), pedido.getItens()));
         }
 
         if(pedido.getPagamentoList().isEmpty()){
             Pagamento pag =  new Pagamento();
             pag.setCartao(pedido.getCliente().getCartaoPreferencial());
-            pag.setValor(pedido.getTotal());
+            pag.setValor(pedido.getTotal() + pedido.getFrete());
             pedido.addPagamento(pag);
         }else{
             if(pedido.getPagamentoList().size() == 1){
-                pedido.getPagamentoList().get(0).setValor(pedido.getTotal());
+                pedido.getPagamentoList().get(0).setValor(pedido.getTotal() + pedido.getFrete());
             }
         }
 
@@ -106,7 +107,7 @@ public class CompraController {
             pedido.addItem(novoItem);
         }
         pedido.atualizarTotal();
-
+        pedido.setFrete(enderecoService.calcularFrete(pedido.getEnderecoEntrega(), pedido.getItens()));
         session.setAttribute("pedido", pedido);
         return "redirect:/carrinho/show";
     }
@@ -119,7 +120,7 @@ public class CompraController {
         if(itemExcluir != null){
             pedido.getItens().remove(itemExcluir);
             // TODO Verificar exclusão do item
-
+            pedido.setFrete(enderecoService.calcularFrete(pedido.getEnderecoEntrega(), pedido.getItens()));
             session.setAttribute("pedido", pedido);
         }
 
@@ -131,6 +132,7 @@ public class CompraController {
         Endereco endereco = enderecoService.findById(enderecoId);
         Pedido pedido = (Pedido) session.getAttribute("pedido");
         pedido.setEnderecoEntrega(endereco);
+        pedido.setFrete(enderecoService.calcularFrete(pedido.getEnderecoEntrega(),pedido.getItens()));
         return "redirect:/carrinho/show";
     }
 
