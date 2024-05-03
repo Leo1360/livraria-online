@@ -36,7 +36,7 @@
 		<div class="row">
 			<div class="col-md-8">
 				<div th:each="item : ${pedido.getItens()}">
-					<div class="card mt-2">
+					<div class="card mt-2 text-truncate">
 						<div class="card-body d-flex justify-content-between align-items-center">
 							<div class="col-md-3">
 								<img class="img-thumbnail" th:src="@{${item.getProduto().getPathImg()}}"  alt="">
@@ -50,7 +50,15 @@
 								<div class="row">
 									<div class="col-md-6">
 										<a th:href="@{'/carrinho/removeItem/' + ${item.getProduto().getId()}}" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;"><i class="bi bi-trash"></i></a>
-										<input autocomplete="off" min="1" type="number" style="width: 30%;" th:value="${item.getQnt()}">
+										<button th:attr="onclick=|editItem('${item.getProduto().getId()}')|" class="btn" role="button" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-pencil"></i></button>
+										<br>
+										<form th:action="@{'/carrinho/editItem'}" method="post" >
+											<input type="hidden" th:value="${item.getProduto().getId()}" name="id" >
+											<input th:id="${'txbQnt' + item.getProduto().getId()}" th:value="${item.getQnt()}" name="qnt" autocomplete="off" min="1" type="number" style="width: 30%;" disabled>
+											<br>
+											<button class="btn" hidden="hidden" th:id="${'btnEditItem' + item.getProduto().getId()}" style="background-color: rgb(4, 152, 11); color: white;" type="submit">Salvar</button>
+										</form>
+
 									</div>
 									
 									<div class="col-md-6">
@@ -183,10 +191,11 @@
 				document.getElementById("btnSave"+id).hidden = false;
 			}
 
-			function hideEditPagamento(id){
-				document.getElementById("cartao"+id).disabled = true;
-				document.getElementById("btnSave"+id).hidden = true;
+			function editItem(id){
+				document.getElementById("txbQnt"+id).disabled = false;
+				document.getElementById("btnEditItem"+id).hidden = false;
 			}
+
 
 
 		</script>
