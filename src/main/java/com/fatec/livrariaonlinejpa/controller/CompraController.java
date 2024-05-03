@@ -60,6 +60,7 @@ public class CompraController {
 
         session.setAttribute("pedido", pedido);
         model.addAttribute("pedido",pedido);
+        model.addAttribute("itemModel",new AddCarrinhoItemDTO());
         return "compra/carrinho";
     }
 
@@ -109,6 +110,20 @@ public class CompraController {
         pedido.atualizarTotal();
         pedido.setFrete(enderecoService.calcularFrete(pedido.getEnderecoEntrega(), pedido.getItens()));
         session.setAttribute("pedido", pedido);
+        return "redirect:/carrinho/show";
+    }
+
+    @PostMapping("/carrinho/editItem")
+    public String editQntItem(HttpSession session , @ModelAttribute("newItem") AddCarrinhoItemDTO itemDto){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        for(ItemCompra item : pedido.getItens()){
+            if(item.getProduto().getId() == itemDto.getId()){
+                item.setQnt(itemDto.getQnt());
+                session.setAttribute("pedido", pedido);
+                break;
+            }
+        }
+
         return "redirect:/carrinho/show";
     }
 
