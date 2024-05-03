@@ -25,6 +25,9 @@ public class Pedido {
     private LocalDate data;
     private double total;
     private double frete;
+    @ManyToOne
+    private Cupom cupom;
+    private double desconto;
 
 
 
