@@ -32,6 +32,8 @@
 			</ul>
 		</div>
 	</nav>
+	<div th:if="${alert != null}" class="alert alert-warning" role="alert" th:text="${alert}">
+	</div>
 	<div class="container mt-5">
 		<div class="row">
 			<div class="col-md-8">
@@ -115,7 +117,6 @@
 												   th:value="${pagamento.getValor()}" disabled>
 											<button autocomplete="off" th:id="${'btnSave' + pagamento.getCartao().getId()}" type="submit" hidden class="btn" style="background-color: rgb(4, 152, 11); color: white;">OK</button>
 										</form>
-										<a href="" role="button" class="btn"></a>
 									</div>
 
 								</div>
@@ -131,9 +132,13 @@
 						<h5>Cupom</h5>
 					</div>
 					<div class="card-body">
-						<input id="txbCupom" type="text" class="form-control" placeholder="Cupom de Desconto" />
-						<button onclick="addCupom(document.getElementById('txbCupom').value)" class="btn btn-block mt-3"
-							style="background-color: rgb(28, 71, 101); color: white;">Aplicar</button>
+						<form action="/carrinho/addCupom" method="post" th:if="${pedido.getCupom() == null}">
+							<input id="txbCupom" type="text" name="nome" class="form-control" placeholder="Cupom de Desconto" />
+							<button type="submit" class="btn btn-block mt-3" style="background-color: rgb(28, 71, 101); color: white;">Aplicar</button>
+						</form>
+						<div th:if="${pedido.getCupom() != null}" >
+							<a href="/carrinho/removerCupom" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;"><i class="bi bi-trash"></i></a>
+						</div>
 					</div>
 				</div>
 				<br>
@@ -142,18 +147,22 @@
 						<div id="resumo">
 							<div class="row">
 								<div class="col">SubTotal</div>
-								<div id="subtotal" class="col" th:text="${#numbers.formatCurrency(pedido.getTotal())}"></div>
+								<div id="subtotal" class="col" th:text="${#numbers.formatCurrency(pedido.getSubTotal())}"></div>
 							</div>
 							<div class="row">
 								<div class="col">Frete</div>
 								<div id="frete" class="col" th:text="${#numbers.formatCurrency(pedido.getFrete())}"></div>
+							</div>
+							<div class="row" th:if="${pedido.getCupom() != null}">
+								<div class="col" th:text="${'Cupom-' + pedido.getCupom().getNome()}"></div>
+								<div id="cupom" class="col" th:text="${#numbers.formatCurrency(pedido.getDesconto() * -1)}"></div>
 							</div>
 
 						</div>
 						<hr style="background-color: rgb(128, 137, 147);">
 						<div class="row">
 							<div class="col">Total</div>
-							<div id="total" class="col" th:text="${#numbers.formatCurrency(pedido.getTotal() + pedido.getFrete())}"></div>
+							<div id="total" class="col" th:text="${#numbers.formatCurrency(pedido.getTotal())}"></div>
 						</div>
 						<a id="btnFinalizar" href="/carrinho/finalizarCompra"><button class="btn btn-block mt-3"
 							style="background-color: rgb(28, 71, 101); color: white;">Finalizar</button></a>

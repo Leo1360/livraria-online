@@ -41,7 +41,7 @@
                     <div class="card-body">
                         <p th:text="${'Feito em ' + #temporals.format(pedido.getData(), 'dd/MM/yyyy')}"></p>
                         <p th:text="${'Status: ' + pedido.getStatus()}"></p>
-                        <p th:text="${'Valor: ' + #numbers.formatCurrency(pedido.getTotal())}"></p>
+                        <p th:text="${'Valor: ' + #numbers.formatCurrency(pedido.getSubTotal())}"></p>
                         <a th:href="@{'/cliente/pedido/' + ${pedido.getId()}}" role="button" class="btn mt-3"
                             style="background-color: rgb(28, 71, 101); color: white;">Ver detalhes</a>
                     </div>

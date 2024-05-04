@@ -62,7 +62,7 @@
                     <div class="col-md-5">
                         <div class="card">
                             <div class="card-body">
-                                <p th:text="${'Total: ' + #numbers.formatCurrency(pedido.getTotal())}"></p>
+                                <p th:text="${'Total: ' + #numbers.formatCurrency(pedido.getSubTotal())}"></p>
                                 <p th:text="${'Status: ' + pedido.getStatus()}"></p>
                             </div>
                         </div>

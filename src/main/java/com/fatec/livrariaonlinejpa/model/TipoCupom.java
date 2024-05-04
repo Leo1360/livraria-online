@@ -8,7 +8,7 @@ public enum TipoCupom {
         this.tipo = tipoCupom;
     }
 
-    public String getTipo(){
+    public String getTipoString(){
         return  this.tipo;
     }
 }
