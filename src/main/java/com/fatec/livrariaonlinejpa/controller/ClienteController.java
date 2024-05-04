@@ -52,7 +52,7 @@ public class ClienteController {
         return "cliente/cartoes";
     }
     
-    @GetMapping("/endereco")
+    @GetMapping("/enderecos")
     public String listarEndereco(HttpSession session,Model model) {
         if(session.getAttribute("clienteId") == null){
             return "redirect:/cliente/novo";

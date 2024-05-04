@@ -53,9 +53,11 @@ public class PedidoService {
         if(pedido.getItens().isEmpty()) return new ValidationResult(false, "O pedido deve ter ao menos um item");
         double totalPag = 0;
         for(Pagamento pagamento : pedido.getPagamentoList()){
-               totalPag += pagamento.getValor();
+               totalPag += pagamento.getValor()*100;
                if(pagamento.getCartao() == null) return new ValidationResult(false, "Houve um erro na seleção do cartão, tente selecionar outro e depois o atual novamente");
         }
+        totalPag = totalPag/100;
+
         if(totalPag != pedido.getTotal()) return new ValidationResult(false, "O valor total nos cartões não corresponde ao total da compra.");
 
         return new ValidationResult(true,null);
