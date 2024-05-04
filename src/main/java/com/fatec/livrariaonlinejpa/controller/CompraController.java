@@ -1,11 +1,11 @@
 package com.fatec.livrariaonlinejpa.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
 import com.fatec.livrariaonlinejpa.model.*;
 import com.fatec.livrariaonlinejpa.services.*;
+import com.fatec.livrariaonlinejpa.util.ValidationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +23,18 @@ public class CompraController {
     private final ProdutoService produtoService;
     private final ClienteService clienteService;
     private final CartaoService cartaoService;
+    private final CupomService cupomService;
 
     @GetMapping("/carrinho/show")
     public String getCarrinho(HttpSession session, Model model){
         Pedido pedido = (Pedido) session.getAttribute("pedido");
+        {
+            String alert = (String) session.getAttribute("alert");
+            if(alert != null){
+                model.addAttribute("alert",alert);
+                session.removeAttribute("alert");
+            }
+        }
         if(pedido == null){
             pedido = new Pedido();
         }
@@ -49,11 +57,11 @@ public class CompraController {
         if(pedido.getPagamentoList().isEmpty()){
             Pagamento pag =  new Pagamento();
             pag.setCartao(pedido.getCliente().getCartaoPreferencial());
-            pag.setValor(pedido.getTotal() + pedido.getFrete());
+            pag.setValor(pedido.getTotal());
             pedido.addPagamento(pag);
         }else{
             if(pedido.getPagamentoList().size() == 1){
-                pedido.getPagamentoList().get(0).setValor(pedido.getTotal() + pedido.getFrete());
+                pedido.getPagamentoList().get(0).setValor(pedido.getTotal());
             }
         }
 
@@ -86,6 +94,30 @@ public class CompraController {
     }
 
 //-------------------------------------------------------------------------------------------
+    @PostMapping("/carrinho/addCupom")
+    public String addCupom(HttpSession session, @RequestParam("nome") String nome){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        if(cupomService.existsByName(nome)){
+            Cupom cupom = cupomService.findByNome(nome);
+            if(cupomService.validarCupom(cupom,pedido.getCliente().getId())){
+                pedido.setCupom(cupom);
+                pedido.setDesconto(cupom.getDesconto());
+
+            }
+        }
+        session.setAttribute("pedido", pedido);
+        return "redirect:/carrinho/show";
+    }
+
+    @GetMapping("/carrinho/removerCupom")
+    public String removerCupom(HttpSession session){
+        Pedido pedido = (Pedido) session.getAttribute("pedido");
+        pedido.setCupom(null);
+        pedido.setDesconto(0);
+        session.setAttribute("pedido", pedido);
+        return "redirect:/carrinho/show";
+    }
+
 
     @PostMapping("/carrinho/addItem")
     public String addItemCarrinho(HttpSession session , @ModelAttribute("newItem") AddCarrinhoItemDTO itemDto) {
@@ -202,9 +234,13 @@ public class CompraController {
     @GetMapping("/carrinho/finalizarCompra")
     public String finalizarCompra(HttpSession session){
         Pedido pedido = (Pedido) session.getAttribute("pedido");
-
+        ValidationResult result = pedidoService.validarPedido(pedido);
+        if(!result.isValid()){
+            session.setAttribute("alert", result.getErrorText());
+            return "redirect:/carrinho/show";
+        }
         pedidoService.salvarNovoPedido(pedido);
-        session.removeAttribute("enderecoEntrega");
+        session.removeAttribute("pedido");
         return "redirect:/cliente/pedidos";
     }
 

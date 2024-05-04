@@ -23,8 +23,11 @@ public class Pedido {
     private Cliente cliente;
     private String status;
     private LocalDate data;
-    private double total;
+    private double subTotal;
     private double frete;
+    @ManyToOne
+    private Cupom cupom;
+    private double desconto;
 
 
 
@@ -41,6 +44,13 @@ public class Pedido {
         for(ItemCompra item: this.itens){
             total += item.getValorUnit() * item.getQnt();
         }
-        this.total = total;
+        this.subTotal = total;
+    }
+
+    public double getTotal(){
+        if(this.subTotal<this.desconto){
+            return this.frete;
+        }
+        return (this.frete + this.subTotal) - this.desconto;
     }
 }
