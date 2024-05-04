@@ -45,7 +45,7 @@
 							</div>
 							<div class="col">
 								<div class="row">
-									<p th:text="${item.getProduto().getNome()}" style="font-size: 25pt; align-self: start"></p>
+									<p th:text="${#strings.abbreviate(item.getProduto().getNome(),35)}" style="font-size: 25pt; align-self: start"></p>
 									
 								</div>
 								<br>
