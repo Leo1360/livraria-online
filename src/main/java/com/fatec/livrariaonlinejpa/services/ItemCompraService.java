@@ -29,4 +29,9 @@ public class ItemCompraService {
         repo.deleteById(id);
     }
 
+    public void registrarDevolucaoItem(long id, int qnt){
+        ItemCompra itemCompra = findById(id);
+        itemCompra.setQntDevolvida(itemCompra.getQntDevolvida() + qnt);
+        save(itemCompra);
+    }
 }

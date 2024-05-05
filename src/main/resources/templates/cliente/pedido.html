@@ -41,28 +41,73 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-12" th:each="item : ${pedido.getItens()}">
-                        <div class="card">
-                            <div class="card-body d-flex justify-content-between align-items-center">
-                                <div class="col-md-1" th:text="${item.getQnt()}"></div>
-                                <div class="col-md-3" th:text="${#strings.abbreviate(item.getProduto().getNome(),30)}"></div>
-                                <div class="col-md-2" th:text="${#numbers.formatCurrency(item.getValorUnit())}"></div>
-                                <div class="col-md-2" th:text="${#numbers.formatCurrency(item.getValorUnit() * item.getQnt())}"></div>
-                                <a href="" class="btn" role="button"
-                                    style="background-color: rgb(28, 71, 101); color: white;" data-toggle="modal"
-                                    data-target="#mTroca"> Trocar</a>
-                                <a href="" class="btn" role="button"
-                                    style="background-color: rgb(28, 71, 101); color: white;" data-toggle="modal"
-                                    data-target="#mDevolucao"> Devolver</a>
+                    <div class="col-md-8">
+                        <div class="card mb-2 text-truncate" th:each="item : ${pedido.getItens()}">
+                            <div class="card-body">
+                                <div class="row  d-flex justify-content-between align-items-center">
+                                    <div class="col-md-3">
+                                        <img class="img-thumbnail" th:src="@{${item.getProduto().getPathImg()}}"  alt="">
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <p th:text="${#strings.abbreviate(item.getProduto().getNome(),30)}" style="font-size: 25pt; align-self: start"></p>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div th:text="${'Qnt: ' + item.getQnt()}"></div>
+                                                <br>
+                                                <strong  style="font-size: 20pt; align-self: start" th:text="${#numbers.formatCurrency(item.getValorUnit())}"></strong>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button th:attr="onclick=|showDevolverItem('${item.getId()}')|" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Devolver</button>
+                                                <button th:attr="onclick=|showTrocarItem('${item.getId()}')|" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Trocar</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <br>
+                                <div th:id="${'devolver'+item.getId()}" class="row" hidden>
+                                    <div class="col-md-4"></div>
+                                        <p>Devolução</p>
+                                    <br>
+                                    <form>
+                                        <input type="hidden" th:value="${item.getId()}">
+                                        <label id="devQnt">Qnt</label>
+                                        <input type="number" th:max="${item.getQnt() - item.getQntDevolvida()}" min="1" value="1">
+                                        <label>Motivo</label>
+                                        <input type="text">
+                                        <button class="btn" type="submit" style="background-color: rgb(4, 152, 11); color: white;">Solicitar</button>
+                                    </form>
+                                    <button class="btn" th:attr="onclick=|cancelarTrocaDevolucao('${item.getId()}')|" style="background-color: rgb(84, 19, 19); color: white;">Cancelar</button>
+                                </div>
+                                <div th:id="${'trocar'+item.getId()}" class="row" hidden>
+                                    <div class="col-md-4"></div>
+                                    <p>Trocar</p>
+                                    <br>
+                                    <form action="/pedido/troca/criar" method="post" >
+                                        <input name="itemId" type="hidden" th:value="${item.getId()}">
+                                        <input name="valorUnit" type="hidden" th:value="${item.getValorUnit()}">
+                                        <input name="clientId" type="hidden" th:value="${pedido.getCliente().getId()}">
+                                        <label >Qnt</label>
+                                        <input name="qnt" type="number" th:max="${item.getQnt() - item.getQntDevolvida()}" min="1" value="1">
+                                        <label>Motivo</label>
+                                        <input name="motivo" type="text">
+                                        <button class="btn" type="submit" style="background-color: rgb(4, 152, 11); color: white;">Solicitar</button>
+                                    </form>
+                                    <button class="btn" th:attr="onclick=|cancelarTrocaDevolucao('${item.getId()}')|" style="background-color: rgb(84, 19, 19); color: white;">Cancelar</button>
+                                </div>
                             </div>
+                            <br>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <p th:text="${'Total: ' + #numbers.formatCurrency(pedido.getSubTotal())}"></p>
+                                <p th:text="${'SubTotal: ' + #numbers.formatCurrency(pedido.getSubTotal())}" id="subtotal"></p>
+                                <p th:text="${'Frete: ' + #numbers.formatCurrency(pedido.getFrete())}" id="frete"></p>
+                                <p th:text="${'Cupom-' + pedido.getCupom().getNome()} + ${#numbers.formatCurrency(pedido.getDesconto() * -1)}" th:if="${pedido.getCupom() != null}"></p>
+                                <p th:text="${'Total: ' + #numbers.formatCurrency(pedido.getTotal())}"></p>
                                 <p th:text="${'Status: ' + pedido.getStatus()}"></p>
                             </div>
                         </div>
@@ -71,58 +116,23 @@
             </div>
         </div>
     </div>
-    <!-- Modal Troca -->
-    <div class="modal" id="mTroca" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Solicitação de troca</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <label for="inpQnt">Quantidade</label>
-                        <input id="inpQtd" name="inpQtd" type="number">
-                        <br>
-                        <label for="inpJustificativa">Justificativa</label>
-                        <br>
-                        <textarea name="" id="" cols="40" rows="5"></textarea>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Solicitar Troca</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal Devolução -->
-    <div class="modal" id="mDevolucao" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Solicitação de devolução</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="">
-                        <label for="inpQnt">Quantidade</label>
-                        <input id="inpQtd" name="inpQtd" type="number">
-                        <br>
-                        <label for="inpJustificativa">Justificativa</label>
-                        <br>
-                        <textarea name="" id="" cols="40" rows="5"></textarea>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Solicitar devolução</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script>
+        function showDevolverItem(id){
+            document.getElementById("devolver"+id).hidden = false;
+            document.getElementById("trocar"+id).hidden = true;
+        }
+        function showTrocarItem(id){
+            document.getElementById("trocar"+id).hidden = false;
+            document.getElementById("devolver"+id).hidden = true;
+        }
+        function cancelarTrocaDevolucao(id){
+            document.getElementById("devolver"+id).hidden = true;
+            document.getElementById("trocar"+id).hidden = true;
+        }
+
+    </script>
+
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>

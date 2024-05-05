@@ -1,10 +1,8 @@
 package com.fatec.livrariaonlinejpa.controller;
 
 
-import com.fatec.livrariaonlinejpa.model.Cartao;
-import com.fatec.livrariaonlinejpa.model.Cliente;
-import com.fatec.livrariaonlinejpa.model.Endereco;
-import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.dto.NovaTrocaDTO;
+import com.fatec.livrariaonlinejpa.model.*;
 import com.fatec.livrariaonlinejpa.services.CartaoService;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 
@@ -184,6 +182,7 @@ public class ClienteController {
     public String getDetalhesPedido(HttpSession session,@PathVariable Long id, Model model){
         Pedido pedido = pedidoService.findById(id);
         model.addAttribute("pedido", pedido);
+        //model.addAttribute("troca", new NovaTrocaDTO());
         return "/cliente/pedido";
 
     }

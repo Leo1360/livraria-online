@@ -172,29 +172,6 @@
 		</div>
 	</div>
 		<script>
-			var values = [12, 2]
-			function addCupom(cupom) {
-				if (cupom != "teste") {
-					alert("Cupom invalido");
-					return;
-				}
-				var valCupom = -5;
-				var html = document.getElementById("resumo").innerHTML;
-				html = html + '<div class="row"><div class="col">Cupom"' + cupom + '":</div><div id="lblCupom" class="col"></div></div>';
-				document.getElementById("resumo").innerHTML = html;
-				document.getElementById("lblCupom").innerHTML = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valCupom);
-				values[values.length] = valCupom;
-				updateTotal();
-			}
-			function updateTotal() {
-				var sum = values.reduce(add, 0);
-				document.getElementById("total").innerHTML = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(sum);
-			}
-
-			function add(accumulator, a) {
-				return accumulator + a;
-			}
-
 			function editPagamento(id){
 				document.getElementById("cartao"+id).disabled = false;
 				document.getElementById("btnSave"+id).hidden = false;
@@ -204,8 +181,6 @@
 				document.getElementById("txbQnt"+id).disabled = false;
 				document.getElementById("btnEditItem"+id).hidden = false;
 			}
-
-
 
 		</script>
 </body>

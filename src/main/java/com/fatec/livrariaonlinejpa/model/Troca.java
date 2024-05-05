@@ -15,6 +15,7 @@ public class Troca {
     private long id;
     private int qnt;
     private double valor;
+    private String motivo;
     @ManyToOne
     private Cliente cliente;
     @ManyToOne
