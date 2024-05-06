@@ -22,13 +22,13 @@ public class Cliente{
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Endereco> enderecosEntrega;
 
     @ManyToOne
     private Endereco enderecoPreferencial;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Cartao> cartoes;
 
     @ManyToOne

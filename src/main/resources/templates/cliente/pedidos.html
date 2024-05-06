@@ -34,21 +34,20 @@
     </nav>
 
     <div class="container mt-4">
-        <div class="card-deck" th:each="pedido : ${pedidos}">
-            <div class="col-md-4 mt-4">
-                <div class="card">
+        <div class="card-deck">
+
+                <div class="card" th:each="pedido : ${pedidos}">
                     <h5 class="card-header" th:text="${'Pedido #' + pedido.getId()}"></h5>
                     <div class="card-body">
                         <p th:text="${'Feito em ' + #temporals.format(pedido.getData(), 'dd/MM/yyyy')}"></p>
-                        <p th:text="${'Status: ' + pedido.getStatus()}"></p>
-                        <p th:text="${'Valor: ' + #numbers.formatCurrency(pedido.getSubTotal())}"></p>
-                        <a th:href="@{'/cliente/pedido/' + ${pedido.getId()}}" role="button" class="btn mt-3"
+                        <p th:text="${'Status: ' + pedido.getStatus().getTexto()}"></p>
+                        <p th:text="${'Valor: ' + #numbers.formatCurrency(pedido.getTotal())}"></p>
+                        <a th:href="@{'/pedido/' + ${pedido.getId()}}" role="button" class="btn mt-3"
                             style="background-color: rgb(28, 71, 101); color: white;">Ver detalhes</a>
                     </div>
                 </div>
-            </div>
+
         </div>
-    </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

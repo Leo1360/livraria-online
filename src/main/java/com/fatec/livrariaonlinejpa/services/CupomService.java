@@ -2,6 +2,8 @@ package com.fatec.livrariaonlinejpa.services;
 
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.model.Cupom;
+import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
+import com.fatec.livrariaonlinejpa.model.TipoCupom;
 import com.fatec.livrariaonlinejpa.repositories.CupomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -52,5 +54,15 @@ public class CupomService {
         if(repo.existsById(novoCupom.getId())){
             repo.save(novoCupom);
         }
+    }
+
+    public Cupom gerarCupom(RetornoMercadoria retorno){
+        Cupom cupom = new Cupom();
+        cupom.setCliente(retorno.getPedido().getCliente());
+        cupom.setNome("troca" + retorno.getId());
+        cupom.setDesconto(retorno.getValor() * retorno.getQnt());
+        cupom.setTipo(TipoCupom.troca);
+        cupom = save(cupom);
+        return cupom;
     }
 }

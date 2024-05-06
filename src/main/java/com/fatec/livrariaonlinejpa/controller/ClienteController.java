@@ -1,14 +1,13 @@
 package com.fatec.livrariaonlinejpa.controller;
 
 
-import com.fatec.livrariaonlinejpa.model.Cartao;
-import com.fatec.livrariaonlinejpa.model.Cliente;
-import com.fatec.livrariaonlinejpa.model.Endereco;
-import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.dto.NovaTrocaDTO;
+import com.fatec.livrariaonlinejpa.model.*;
 import com.fatec.livrariaonlinejpa.services.CartaoService;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 
 import com.fatec.livrariaonlinejpa.services.PedidoService;
+import com.fatec.livrariaonlinejpa.services.RetornoMercadoriaService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -32,6 +31,7 @@ import java.util.List;
 public class ClienteController {
     private final ClienteService clienteService;
     private final PedidoService pedidoService;
+    private final RetornoMercadoriaService retornoMercadoriaService;
 
 
     @GetMapping("/setSession/{id}")
@@ -52,7 +52,7 @@ public class ClienteController {
         return "cliente/cartoes";
     }
     
-    @GetMapping("/endereco")
+    @GetMapping("/enderecos")
     public String listarEndereco(HttpSession session,Model model) {
         if(session.getAttribute("clienteId") == null){
             return "redirect:/cliente/novo";
@@ -104,14 +104,6 @@ public class ClienteController {
         model.addAttribute("endereco", endereco);
         model.addAttribute("onEdit", onEdit);
         return "cliente/cadastrar_endereco";
-    }
-
-    @GetMapping("/pedidos")
-    public String listPedidosCliente(HttpSession session,Model model){
-        long id = (Long) session.getAttribute("clienteId");
-        List<Pedido> pedidos = pedidoService.listarPedidosByCliente(id);
-        model.addAttribute("pedidos", pedidos);
-        return "/cliente/pedidos";
     }
 
 
@@ -180,12 +172,5 @@ public class ClienteController {
         return "redirect:/cliente/novo";
     }
 
-    @GetMapping("/pedido/{id}")
-    public String getDetalhesPedido(HttpSession session,@PathVariable Long id, Model model){
-        Pedido pedido = pedidoService.findById(id);
-        model.addAttribute("pedido", pedido);
-        return "/cliente/pedido";
-
-    }
 
 }

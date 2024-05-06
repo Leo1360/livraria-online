@@ -1,22 +1,23 @@
 package com.fatec.livrariaonlinejpa.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity
-public class Troca {
+public class RetornoMercadoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int qnt;
     private double valor;
-    @ManyToOne
-    private Cliente cliente;
+    private String motivo;
     @ManyToOne
     private ItemCompra itemCompra;
+    private TipoRetornoMercadoria tipo;
+    @ManyToOne
+    private Pedido pedido;
+    private StatusRetMercadoria status;
+    @OneToOne
+    private Cupom cupom;
 }
