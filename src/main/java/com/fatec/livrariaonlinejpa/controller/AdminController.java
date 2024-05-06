@@ -58,4 +58,11 @@ public class AdminController {
         retornoMercadoriaService.reprovar(id);
         return "redirect:/adm/pedidos";
     }
+
+    @GetMapping("/sinalizarRecebimento/{id}")
+    public String sinalizarRecebimento(HttpSession session, @PathVariable long id){
+        retornoMercadoriaService.sinalizarRecebimento(id);
+        return "redirect:/adm/pedidos";
+    }
+
 }

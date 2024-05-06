@@ -55,15 +55,7 @@ public class RetornoMercadoriaService {
     public void aprovar(long id) {
         RetornoMercadoria retorno = repo.findById(id).orElse(null);
         if(retorno != null) {
-            Cupom cupom = new Cupom();
-            cupom.setCliente(retorno.getPedido().getCliente());
-            cupom.setNome("troca"+retorno.getId());
-            cupom.setDesconto(retorno.getValor() * retorno.getQnt());
-            cupom.setTipo(TipoCupom.troca);
-            cupom = cupomService.save(cupom);
-
             retorno.setStatus(StatusRetMercadoria.APROVADO);
-            retorno.setCupom(cupom);
             repo.save(retorno);
         }
     }
@@ -75,5 +67,29 @@ public class RetornoMercadoriaService {
             retorno.setStatus(StatusRetMercadoria.REPROVADO);
             repo.save(retorno);
         }
+    }
+
+    public void sinalizarEnvio(long id){
+        RetornoMercadoria retorno = repo.findById(id).orElse(null);
+        if(retorno != null){
+            retorno.setStatus(StatusRetMercadoria.PRODUTOS_ENVIADOS);
+            repo.save(retorno);
+        }
+    }
+
+    public void sinalizarRecebimento(long id){
+        RetornoMercadoria retorno = repo.findById(id).orElse(null);
+        if(retorno != null) {
+            Cupom cupom = cupomService.gerarCupom(retorno);
+            retorno.setCupom(cupom);
+
+            retorno.setStatus(StatusRetMercadoria.PRODUTOS_RECEBIDOS);
+            repo.save(retorno);
+        }
+    }
+
+
+    public List<RetornoMercadoria> findByPedidId(long id){
+        return repo.findByPedidoId(id);
     }
 }

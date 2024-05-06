@@ -241,7 +241,7 @@ public class CompraController {
         }
         pedidoService.salvarNovoPedido(pedido);
         session.removeAttribute("pedido");
-        return "redirect:/cliente/pedidos";
+        return "redirect:/pedido/cliente";
     }
 
     //--------------------------------------------------------------------------------

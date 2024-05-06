@@ -7,6 +7,7 @@ import com.fatec.livrariaonlinejpa.services.CartaoService;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 
 import com.fatec.livrariaonlinejpa.services.PedidoService;
+import com.fatec.livrariaonlinejpa.services.RetornoMercadoriaService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import java.util.List;
 public class ClienteController {
     private final ClienteService clienteService;
     private final PedidoService pedidoService;
+    private final RetornoMercadoriaService retornoMercadoriaService;
 
 
     @GetMapping("/setSession/{id}")
@@ -104,14 +106,6 @@ public class ClienteController {
         return "cliente/cadastrar_endereco";
     }
 
-    @GetMapping("/pedidos")
-    public String listPedidosCliente(HttpSession session,Model model){
-        long id = (Long) session.getAttribute("clienteId");
-        List<Pedido> pedidos = pedidoService.listarPedidosByCliente(id);
-        model.addAttribute("pedidos", pedidos);
-        return "/cliente/pedidos";
-    }
-
 
     // --------------------create----------------------------
 
@@ -178,13 +172,5 @@ public class ClienteController {
         return "redirect:/cliente/novo";
     }
 
-    @GetMapping("/pedido/{id}")
-    public String getDetalhesPedido(HttpSession session,@PathVariable Long id, Model model){
-        Pedido pedido = pedidoService.findById(id);
-        model.addAttribute("pedido", pedido);
-        //model.addAttribute("troca", new NovaTrocaDTO());
-        return "/cliente/pedido";
-
-    }
 
 }

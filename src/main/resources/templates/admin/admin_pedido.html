@@ -100,6 +100,9 @@
                                 <a th:href="@{'/adm/aprovarRetorno/' + ${retornoMercadoria.getId()}}" class="btn" role="button" style="background-color: rgb(4, 152, 11); color: white;">Aprovar</a>
                                 <a th:href="@{'/adm/reprovarRetorno/' + ${retornoMercadoria.getId()}}" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;">Reprovar</a>
                             </div>
+                            <div class="align-text-bottom" th:if="${retornoMercadoria.getStatus().toString() == 'PRODUTOS_ENVIADOS'}">
+                                <a th:href="@{'/adm/sinalizarRecebimento/' + ${retornoMercadoria.getId()}}" class="btn" role="button" style="background-color: rgb(4, 152, 11); color: white;">Aprovar</a>
+                            </div>
 
                         </div>
                     </div>
