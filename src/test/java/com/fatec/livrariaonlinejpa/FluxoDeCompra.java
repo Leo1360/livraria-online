@@ -47,7 +47,7 @@ class FluxoDeCompra {
         Cliente cliente = clienteService.findById(1);
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
-        pedido.setStatus("Em Separacao");
+        pedido.setStatus(StatusPedido.EM_PROCESSAMENTO);
         pedido.setItens(compraList);
         pedido.setEnderecoEntrega(cliente.getEnderecosEntrega().get(0));
         Pagamento pagamento = new Pagamento();

@@ -55,12 +55,17 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div th:text="${'Qnt: ' + item.getQnt()}"></div>
+                                                <p th:if="${item.getQntDevolvida() > 0}" th:text="${'Devolução/troca para' +  item.getQntDevolvida() + 'iten(s)'}"></p>
                                                 <br>
                                                 <strong  style="font-size: 20pt; align-self: start" th:text="${#numbers.formatCurrency(item.getValorUnit())}"></strong>
                                             </div>
                                             <div class="col-md-6">
-                                                <button th:attr="onclick=|showDevolverItem('${item.getId()}')|" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Devolver</button>
-                                                <button th:attr="onclick=|showTrocarItem('${item.getId()}')|" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Trocar</button>
+                                                <div th:if="${item.getQnt() > item.getQntDevolvida()}">
+                                                    <button th:attr="onclick=|showDevolverItem('${item.getId()}')|" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Devolver</button>
+                                                    <button th:attr="onclick=|showTrocarItem('${item.getId()}')|" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Trocar</button>
+
+                                                </div>
+
                                             </div>
                                         </div>
 
@@ -71,12 +76,14 @@
                                     <div class="col-md-4"></div>
                                         <p>Devolução</p>
                                     <br>
-                                    <form>
-                                        <input type="hidden" th:value="${item.getId()}">
-                                        <label id="devQnt">Qnt</label>
-                                        <input type="number" th:max="${item.getQnt() - item.getQntDevolvida()}" min="1" value="1">
+                                    <form action="/pedido/devolucao/criar" method="post">
+                                        <input name="itemId" type="hidden" th:value="${item.getId()}">
+                                        <input name="valorUnit" type="hidden" th:value="${item.getValorUnit()}">
+                                        <input name="pedidoId" type="hidden" th:value="${pedido.getId()}">
+                                        <label >Qnt</label>
+                                        <input name="qnt" type="number" th:max="${item.getQnt() - item.getQntDevolvida()}" min="1" value="1">
                                         <label>Motivo</label>
-                                        <input type="text">
+                                        <input name="motivo" type="text">
                                         <button class="btn" type="submit" style="background-color: rgb(4, 152, 11); color: white;">Solicitar</button>
                                     </form>
                                     <button class="btn" th:attr="onclick=|cancelarTrocaDevolucao('${item.getId()}')|" style="background-color: rgb(84, 19, 19); color: white;">Cancelar</button>
@@ -88,7 +95,7 @@
                                     <form action="/pedido/troca/criar" method="post" >
                                         <input name="itemId" type="hidden" th:value="${item.getId()}">
                                         <input name="valorUnit" type="hidden" th:value="${item.getValorUnit()}">
-                                        <input name="clientId" type="hidden" th:value="${pedido.getCliente().getId()}">
+                                        <input name="pedidoId" type="hidden" th:value="${pedido.getId()}">
                                         <label >Qnt</label>
                                         <input name="qnt" type="number" th:max="${item.getQnt() - item.getQntDevolvida()}" min="1" value="1">
                                         <label>Motivo</label>
@@ -108,7 +115,7 @@
                                 <p th:text="${'Frete: ' + #numbers.formatCurrency(pedido.getFrete())}" id="frete"></p>
                                 <p th:text="${'Cupom-' + pedido.getCupom().getNome()} + ${#numbers.formatCurrency(pedido.getDesconto() * -1)}" th:if="${pedido.getCupom() != null}"></p>
                                 <p th:text="${'Total: ' + #numbers.formatCurrency(pedido.getTotal())}"></p>
-                                <p th:text="${'Status: ' + pedido.getStatus()}"></p>
+                                <p th:text="${'Status: ' + pedido.getStatus().getTexto()}"></p>
                             </div>
                         </div>
                     </div>

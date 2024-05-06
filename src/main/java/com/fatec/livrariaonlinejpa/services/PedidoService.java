@@ -3,6 +3,7 @@ package com.fatec.livrariaonlinejpa.services;
 import com.fatec.livrariaonlinejpa.model.ItemCompra;
 import com.fatec.livrariaonlinejpa.model.Pagamento;
 import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.model.StatusPedido;
 import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
 import com.fatec.livrariaonlinejpa.util.ValidationResult;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,13 @@ public class PedidoService {
         return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Pedido not found"));
     }
 
+    public List<Pedido> findAll(){
+        return repo.findAll();
+    }
+
     public Pedido salvarNovoPedido(Pedido pedido){
         pedido.setData(LocalDate.now());
-        pedido.setStatus("Aguardando Pagamento");
+        pedido.setStatus(StatusPedido.EM_PROCESSAMENTO);
         double total = 0;
         for(ItemCompra item : pedido.getItens()){
             total += item.getValorUnit() * item.getQnt();

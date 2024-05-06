@@ -21,7 +21,7 @@ public class Pedido {
     private List<Pagamento> pagamentoList = new ArrayList<>();
     @ManyToOne
     private Cliente cliente;
-    private String status;
+    private StatusPedido status;
     private LocalDate data;
     private double subTotal;
     private double frete;

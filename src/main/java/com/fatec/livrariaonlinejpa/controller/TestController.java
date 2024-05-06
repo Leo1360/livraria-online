@@ -1,31 +1,22 @@
 package com.fatec.livrariaonlinejpa.controller;
 
-import com.fatec.livrariaonlinejpa.model.Cartao;
-import com.fatec.livrariaonlinejpa.model.Cliente;
-import com.fatec.livrariaonlinejpa.model.Cupom;
-import com.fatec.livrariaonlinejpa.model.TipoCupom;
-import com.fatec.livrariaonlinejpa.repositories.ClienteRepository;
-import com.fatec.livrariaonlinejpa.services.ClienteService;
-import com.fatec.livrariaonlinejpa.services.CupomService;
+import com.fatec.livrariaonlinejpa.model.*;
+import com.fatec.livrariaonlinejpa.services.RetornoMercadoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class TestController {
-    private final CupomService cupomService;
-    private final ClienteRepository clienteRepository;
+    private final RetornoMercadoriaService retornoMercadoriaService;
 
     @GetMapping("/test")
     public String teste(){
-        Cupom cupom = new Cupom();
-        cupom.setDesconto(50);
-        cupom.setNome("troca50");
-        cupom.setTipo(TipoCupom.troca);
-        Cliente cliente = clienteRepository.getReferenceById(1l);
-        cupom.setCliente(cliente);
-        cupomService.save(cupom);
+        List<RetornoMercadoria> retornoMercadoriaList = retornoMercadoriaService.listTrocasPedido(12);
+        System.out.println(retornoMercadoriaList);
         return "/home";
     }
 }
