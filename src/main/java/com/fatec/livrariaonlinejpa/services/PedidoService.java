@@ -34,6 +34,9 @@ public class PedidoService {
             total += item.getValorUnit() * item.getQnt();
         }
         pedido.setSubTotal(total);
+        if(pedido.getCupom() != null){
+            pedido.getCupom().setAtivo(false);
+        }
         return repo.save(pedido);
     }
 

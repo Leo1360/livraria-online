@@ -32,33 +32,24 @@
 			</ul>
 		</div>
 	</nav>
+
 	<div class="container mt-5">
+		<h2>Cupons</h2>
 		<div class="row">
 			<div class="col-md-8">
-				<table class="table table-bordered">
-					<thead>
-						<tr>
-							<th>Cupom</th>
-							<th>Valor</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>ABCDE20</td>
-							<td>R$ 20,00</td>
-						</tr>
-						<tr>
-							<td>ABCDE20</td>
-							<td>R$ 20,00</td>
-						</tr>
-						<tr>
-							<td>ABCDE20</td>
-							<td>R$ 20,00</td>
-						</tr>
-					</tbody>
-				</table>
-
+				<div class="card" th:each="cupom : ${cupons}">
+					<div class="card-header">
+						Cupom: <strong th:text="${cupom.getNome()}"></strong>
+					</div>
+					<div class="card-body">
+						<p th:text="${'Desconto: ' + #numbers.formatCurrency(cupom.getDesconto())}"></p>
+						<p th:if="${cupom.isAtivo()}">Status: Ativo</p>
+						<p th:if="${!cupom.isAtivo()}">Status: Usado/Desativado</p>
+					</div>
+				</div>
 			</div>
+		</div>
+	</div>
 </body>
 
 </html>

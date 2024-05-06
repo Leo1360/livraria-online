@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CupomService {
@@ -39,6 +41,10 @@ public class CupomService {
         return repo.findByNome(nome);
     }
 
+    public List<Cupom> findAll(){
+        return repo.findAll();
+    }
+
     public void delete(long id){
         if(repo.existsById(id)){
             repo.deleteById(id);
@@ -65,4 +71,18 @@ public class CupomService {
         cupom = save(cupom);
         return cupom;
     }
+
+    public Cupom gerarCupom(String nome, double desconto){
+        Cupom cupom =  new Cupom();
+        cupom.setNome(nome);
+        cupom.setDesconto(desconto);
+        cupom.setTipo(TipoCupom.promocao);
+        return save(cupom);
+    }
+
+    public List<Cupom> listByClienteId(long id){
+        return repo.findByCliente_Id(id);
+    }
+
+
 }
