@@ -3,6 +3,8 @@ package com.fatec.livrariaonlinejpa.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 public class Pagamento {
@@ -11,5 +13,5 @@ public class Pagamento {
     private long id;
     @ManyToOne
     private Cartao cartao;
-    private double valor;
+    private BigDecimal valor = new BigDecimal(0);
 }

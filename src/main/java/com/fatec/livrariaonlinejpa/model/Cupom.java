@@ -3,6 +3,8 @@ package com.fatec.livrariaonlinejpa.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 public class Cupom {
@@ -11,7 +13,7 @@ public class Cupom {
     private long id;
 
     private String nome;
-    private double desconto;
+    private BigDecimal desconto = new BigDecimal(0);
     private TipoCupom tipo;
     private boolean ativo = true;
     @ManyToOne

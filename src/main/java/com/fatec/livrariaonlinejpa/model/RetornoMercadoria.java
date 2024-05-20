@@ -3,6 +3,8 @@ package com.fatec.livrariaonlinejpa.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 public class RetornoMercadoria {
@@ -10,7 +12,7 @@ public class RetornoMercadoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int qnt;
-    private double valor;
+    private BigDecimal valor = new BigDecimal(0);
     private String motivo;
     @ManyToOne
     private ItemCompra itemCompra;

@@ -1,5 +1,6 @@
 package com.fatec.livrariaonlinejpa.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
@@ -57,11 +58,11 @@ public class CompraController {
         if(pedido.getPagamentoList().isEmpty()){
             Pagamento pag =  new Pagamento();
             pag.setCartao(pedido.getCliente().getCartaoPreferencial());
-            pag.setValor(pedido.getTotal());
+            pag.setValor(pedido.getTotalBigDecimal());
             pedido.addPagamento(pag);
         }else{
             if(pedido.getPagamentoList().size() == 1){
-                pedido.getPagamentoList().get(0).setValor(pedido.getTotal());
+                pedido.getPagamentoList().get(0).setValor(pedido.getTotalBigDecimal());
             }
         }
 
@@ -113,7 +114,7 @@ public class CompraController {
     public String removerCupom(HttpSession session){
         Pedido pedido = (Pedido) session.getAttribute("pedido");
         pedido.setCupom(null);
-        pedido.setDesconto(0);
+        pedido.setDesconto(new BigDecimal(0));
         session.setAttribute("pedido", pedido);
         return "redirect:/carrinho/show";
     }
@@ -155,6 +156,7 @@ public class CompraController {
                 break;
             }
         }
+        pedido.setFrete(enderecoService.calcularFrete(pedido.getEnderecoEntrega(), pedido.getItens()));
 
         return "redirect:/carrinho/show";
     }
@@ -166,7 +168,6 @@ public class CompraController {
         ItemCompra itemExcluir = pedido.getItens().stream().filter(item -> item.getProduto().getId() == idProduto).findFirst().orElse(null);
         if(itemExcluir != null){
             pedido.getItens().remove(itemExcluir);
-            // TODO Verificar exclusão do item
             pedido.setFrete(enderecoService.calcularFrete(pedido.getEnderecoEntrega(), pedido.getItens()));
             session.setAttribute("pedido", pedido);
         }
@@ -200,7 +201,7 @@ public class CompraController {
             pagamento.setCartao(cartaoService.findById(id));
 
             if(pedido.getPagamentoList().isEmpty()){
-                pagamento.setValor(pedido.getTotal());
+                pagamento.setValor(pedido.getTotalBigDecimal());
             }
             pedido.addPagamento(pagamento);
         }
@@ -210,7 +211,7 @@ public class CompraController {
     }
 
     @GetMapping("/carrinho/editarPagamento")
-    public String editPagamento(HttpSession session ,@RequestParam("id") long id, @RequestParam("valor") double valor ){
+    public String editPagamento(HttpSession session ,@RequestParam("id") long id, @RequestParam("valor") BigDecimal valor ){
         Pedido pedido = (Pedido) session.getAttribute("pedido");
         for(Pagamento pagamento : pedido.getPagamentoList()){
             if (pagamento.getCartao().getId() == id){

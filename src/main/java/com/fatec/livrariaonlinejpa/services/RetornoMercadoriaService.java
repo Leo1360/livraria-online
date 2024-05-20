@@ -9,6 +9,7 @@ import com.fatec.livrariaonlinejpa.repositories.RetornoMercadoriaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -29,7 +30,7 @@ public class RetornoMercadoriaService {
         retornoMercadoria.setItemCompra(itemCompraRepository.getReferenceById(trocaDTO.getItemId()));
         retornoMercadoria.setPedido(pedidoRepository.getReferenceById(trocaDTO.getPedidoId()));
         retornoMercadoria.setQnt(trocaDTO.getQnt());
-        retornoMercadoria.setValor(trocaDTO.getValorUnit());
+        retornoMercadoria.setValor(new BigDecimal(trocaDTO.getValorUnit()));
         retornoMercadoria.setMotivo(trocaDTO.getMotivo());
         retornoMercadoria.setTipo(TipoRetornoMercadoria.TROCA);
         retornoMercadoria.setStatus(StatusRetMercadoria.AGUARDANDO_ANALISE);
@@ -41,7 +42,7 @@ public class RetornoMercadoriaService {
         retornoMercadoria.setItemCompra(itemCompraRepository.getReferenceById(trocaDTO.getItemId()));
         retornoMercadoria.setPedido(pedidoRepository.getReferenceById(trocaDTO.getPedidoId()));
         retornoMercadoria.setQnt(trocaDTO.getQnt());
-        retornoMercadoria.setValor(trocaDTO.getValorUnit());
+        retornoMercadoria.setValor(new BigDecimal(trocaDTO.getValorUnit()));
         retornoMercadoria.setMotivo(trocaDTO.getMotivo());
         retornoMercadoria.setTipo(TipoRetornoMercadoria.DEVOLUCAO);
         retornoMercadoria.setStatus(StatusRetMercadoria.AGUARDANDO_ANALISE);

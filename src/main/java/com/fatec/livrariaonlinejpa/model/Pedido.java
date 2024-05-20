@@ -1,5 +1,7 @@
 package com.fatec.livrariaonlinejpa.model;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,11 @@ public class Pedido {
     private Cliente cliente;
     private StatusPedido status;
     private LocalDate data;
-    private double subTotal;
-    private double frete;
+    private BigDecimal subTotal = new BigDecimal(0);
+    private BigDecimal frete = new BigDecimal(0);
     @ManyToOne
     private Cupom cupom;
-    private double desconto;
+    private BigDecimal desconto = new BigDecimal(0);
 
 
 
@@ -40,17 +42,32 @@ public class Pedido {
     }
 
     public void atualizarTotal(){
-        double total = 0;
+        BigDecimal total = new BigDecimal(0);
         for(ItemCompra item: this.itens){
-            total += item.getValorUnit() * item.getQnt();
+            BigDecimal itemSub = item.getValorUnit().multiply(new BigDecimal(item.getQnt()));
+            total = total.add(itemSub);
         }
         this.subTotal = total;
     }
 
+
     public double getTotal(){
-        if(this.subTotal<this.desconto){
+        if(this.desconto != null && this.subTotal.doubleValue() < this.desconto.doubleValue()){
+            return this.frete.doubleValue();
+        }
+        BigDecimal total = this.frete;
+        total = total.add(this.subTotal);
+        total = total.subtract(this.desconto);
+        return total.doubleValue();
+    }
+
+    public BigDecimal getTotalBigDecimal(){
+        if(this.desconto != null && this.subTotal.doubleValue() < this.desconto.doubleValue()){
             return this.frete;
         }
-        return (this.frete + this.subTotal) - this.desconto;
+        BigDecimal total = this.frete;
+        total = total.add(this.subTotal);
+        total = total.subtract(this.desconto);
+        return total;
     }
 }
