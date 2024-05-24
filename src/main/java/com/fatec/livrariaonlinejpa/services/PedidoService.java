@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,11 +30,12 @@ public class PedidoService {
     public Pedido salvarNovoPedido(Pedido pedido){
         pedido.setData(LocalDate.now());
         pedido.setStatus(StatusPedido.EM_PROCESSAMENTO);
-        double total = 0;
-        for(ItemCompra item : pedido.getItens()){
-            total += item.getValorUnit() * item.getQnt();
+
+        pedido.atualizarTotal();
+
+        if(pedido.getCupom() != null){
+            pedido.getCupom().setAtivo(false);
         }
-        pedido.setSubTotal(total);
         return repo.save(pedido);
     }
 
@@ -54,14 +56,14 @@ public class PedidoService {
         }
         if(pedido.getEnderecoEntrega() == null) return new ValidationResult(false, "Informe um endereço válido");
         if(pedido.getItens().isEmpty()) return new ValidationResult(false, "O pedido deve ter ao menos um item");
-        double totalPag = 0;
+        BigDecimal totalPag = new BigDecimal(0);
         for(Pagamento pagamento : pedido.getPagamentoList()){
-               totalPag += pagamento.getValor()*100;
+               totalPag = totalPag.add(pagamento.getValor());
                if(pagamento.getCartao() == null) return new ValidationResult(false, "Houve um erro na seleção do cartão, tente selecionar outro e depois o atual novamente");
         }
-        totalPag = totalPag/100;
 
-        if(totalPag != pedido.getTotal()) return new ValidationResult(false, "O valor total nos cartões não corresponde ao total da compra.");
+        BigDecimal total = pedido.getTotalBigDecimal();
+        if(totalPag.toString() == total.toString()) return new ValidationResult(false, "O valor total nos cartões não corresponde ao total da compra.");
 
         return new ValidationResult(true,null);
     }
@@ -75,7 +77,7 @@ public class PedidoService {
         retornoMercadoria.setPedido(pedido);
         retornoMercadoria.setTipo(TipoRetornoMercadoria.TROCA);
         retornoMercadoria.setMotivo("CANCELAMENTO DE PEDIDO");
-        retornoMercadoria.setValor(pedido.getTotal());
+        retornoMercadoria.setValor(new BigDecimal(pedido.getTotal()));
         retornoMercadoria.setQnt(1);
         retornoMercadoria.setStatus(StatusRetMercadoria.PRODUTOS_RECEBIDOS);
         retornoMercadoria = retornoMercadoriaService.save(retornoMercadoria);
@@ -94,4 +96,6 @@ public class PedidoService {
         }
         return new ValidationResult(true,"");
     }
+
+
 }

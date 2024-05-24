@@ -3,6 +3,8 @@ package com.fatec.livrariaonlinejpa.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 public class Produto {
@@ -17,6 +19,6 @@ public class Produto {
     @Column(length = 500)
     private String descricao;
     
-    private double valor;
+    private BigDecimal valor = new BigDecimal(0);
 
 }

@@ -1,5 +1,6 @@
 package com.fatec.livrariaonlinejpa.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fatec.livrariaonlinejpa.model.ItemCompra;
@@ -47,8 +48,14 @@ private final EnderecoRepository repo;
         repo.deleteById(id);
     }
 
-    public double calcularFrete(Endereco endereco, List<ItemCompra> itens){
-        return itens.size() * 2.13;
+    public BigDecimal calcularFrete(Endereco endereco, List<ItemCompra> itens){
+        int qntItens = 0;
+        for(ItemCompra item: itens){
+            qntItens += item.getQnt();
+        }
+        BigDecimal frete = new BigDecimal("2.13");
+        frete = frete.multiply(new BigDecimal(qntItens));
+        return frete;
     }
     
 

@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 public class ItemCompra {
@@ -17,7 +19,7 @@ public class ItemCompra {
     private long id;
     @ManyToOne
     private Produto produto;
-    private double valorUnit;
+    private BigDecimal valorUnit = new BigDecimal(0);
     private int qnt;
     private int qntDevolvida;
 }
