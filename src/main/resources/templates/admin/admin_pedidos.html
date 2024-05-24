@@ -36,9 +36,9 @@
 </nav>
 
 <div class="container mt-4">
-    <div class="card-deck">
-
-        <div class="card" th:each="pedido : ${pedidos}">
+    <div class="row row-cols-1 row-cols-md-3">
+        <div class="col mb-4" th:each="pedido : ${pedidos}">
+            <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 th:text="${'Pedido #' + pedido.getId()}"></h5>
                 <form action="/adm/pedido/mudarStatus" method="post">
@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-
+        </div>
     </div>
 </div>
 

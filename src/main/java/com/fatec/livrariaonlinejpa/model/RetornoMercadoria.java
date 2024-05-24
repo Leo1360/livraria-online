@@ -20,6 +20,6 @@ public class RetornoMercadoria {
     @ManyToOne
     private Pedido pedido;
     private StatusRetMercadoria status;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     private Cupom cupom;
 }

@@ -20,6 +20,7 @@ public class RetornoMercadoriaService {
     private final PedidoRepository pedidoRepository;
     private final CupomService cupomService;
 
+
     public RetornoMercadoria save(RetornoMercadoria retornoMercadoria){
 
         return  repo.save(retornoMercadoria);
@@ -81,8 +82,13 @@ public class RetornoMercadoriaService {
     public void sinalizarRecebimento(long id){
         RetornoMercadoria retorno = repo.findById(id).orElse(null);
         if(retorno != null) {
+            if(retorno.getPedido().qntItensRestantes() == 0){
+                retorno.getPedido().setStatus(StatusPedido.ENTREGUE);
+            }
             Cupom cupom = cupomService.gerarCupom(retorno);
-            retorno.setCupom(cupom);
+
+            retorno.setCupom(cupomService.getReferenceById(cupom.getId()));
+
 
             retorno.setStatus(StatusRetMercadoria.PRODUTOS_RECEBIDOS);
             repo.save(retorno);

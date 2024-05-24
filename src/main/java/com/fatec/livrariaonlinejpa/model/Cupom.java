@@ -12,6 +12,7 @@ public class Cupom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique = true)
     private String nome;
     private BigDecimal desconto = new BigDecimal(0);
     private TipoCupom tipo;

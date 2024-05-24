@@ -70,4 +70,15 @@ public class Pedido {
         total = total.subtract(this.desconto);
         return total;
     }
+
+    public int qntItensRestantes(){
+        int devolvidos = 0;
+        int total = 0;
+        for(ItemCompra item : this.itens){
+            devolvidos += item.getQntDevolvida();
+            total += item.getQnt();
+        }
+        return total-devolvidos;
+    }
+
 }

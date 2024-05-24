@@ -18,6 +18,10 @@ import java.util.List;
 public class CupomService {
     private final CupomRepository repo;
 
+    public Cupom getReferenceById(long id){
+        return repo.getReferenceById(id);
+    }
+
     public boolean validarCupom(Cupom cupom, long clientId) {
         if(! cupom.isAtivo()){
             return false;
