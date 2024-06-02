@@ -43,9 +43,11 @@
     <div class="container mt-5" th:each="endereco: ${enderecos}">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <p th:text="${endereco.getLogradouro()}"></p>
-                <a th:href="@{'/carrinho/setEndereco/' + ${endereco.getId()}}" class="btn" role="button"
-                    style="background-color: rgb(28, 71, 101); color: white;">Selecionar</a>
+                <form action="/carrinho/setEndereco" method="post">
+                    <p th:text="${endereco.getLogradouro()}"></p>
+                    <input name="id" type="hidden" th:value="${endereco.getId()}">
+                    <button class="btn" type="submit" style="background-color: rgb(28, 71, 101); color: white;">Selecionar</button>
+                </form>
             </div>
             <div class="card-body">
                 <p th:text="${'Nº:' + endereco.getNumero()}"></p>

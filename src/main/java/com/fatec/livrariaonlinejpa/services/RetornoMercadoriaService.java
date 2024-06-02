@@ -95,7 +95,6 @@ public class RetornoMercadoriaService {
         }
     }
 
-
     public List<RetornoMercadoria> findByPedidId(long id){
         return repo.findByPedidoId(id);
     }

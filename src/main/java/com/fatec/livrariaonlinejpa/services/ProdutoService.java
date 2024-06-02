@@ -36,4 +36,8 @@ public class ProdutoService {
         }
         return produtoList;
     }
+
+    public Produto getReferenceById(long id){
+        return repo.getReferenceById(id);
+    }
 }

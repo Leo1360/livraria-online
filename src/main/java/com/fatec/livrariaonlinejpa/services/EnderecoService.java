@@ -48,15 +48,5 @@ private final EnderecoRepository repo;
         repo.deleteById(id);
     }
 
-    public BigDecimal calcularFrete(Endereco endereco, List<ItemCompra> itens){
-        int qntItens = 0;
-        for(ItemCompra item: itens){
-            qntItens += item.getQnt();
-        }
-        BigDecimal frete = new BigDecimal("2.13");
-        frete = frete.multiply(new BigDecimal(qntItens));
-        return frete;
-    }
-    
 
 }

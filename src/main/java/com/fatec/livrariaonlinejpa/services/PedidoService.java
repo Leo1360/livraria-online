@@ -30,11 +30,12 @@ public class PedidoService {
     public Pedido salvarNovoPedido(Pedido pedido){
         pedido.setData(LocalDate.now());
         pedido.setStatus(StatusPedido.EM_PROCESSAMENTO);
-
-        pedido.atualizarTotal();
-
-        if(pedido.getCupom() != null){
-            pedido.getCupom().setAtivo(false);
+        if(! pedido.getCupons().isEmpty()){
+            for(Cupom cupom: pedido.getCupons()){
+                if(cupom.getTipo() == TipoCupom.troca){
+                    cupom.setAtivo(false);
+                }
+            }
         }
         return repo.save(pedido);
     }
@@ -48,26 +49,6 @@ public class PedidoService {
         return repo.findPedidoByClienteId(clienteId);
     }
 
-    public ValidationResult validarPedido(Pedido pedido){
-        if(pedido.getCupom() != null){
-            if(! cupomService.validarCupom(pedido.getCupom(), pedido.getCliente().getId())){
-                return new ValidationResult(false,"Este cupom n é valido para esse usuario");
-            }
-        }
-        if(pedido.getEnderecoEntrega() == null) return new ValidationResult(false, "Informe um endereço válido");
-        if(pedido.getItens().isEmpty()) return new ValidationResult(false, "O pedido deve ter ao menos um item");
-        BigDecimal totalPag = new BigDecimal(0);
-        for(Pagamento pagamento : pedido.getPagamentoList()){
-               totalPag = totalPag.add(pagamento.getValor());
-               if(pagamento.getCartao() == null) return new ValidationResult(false, "Houve um erro na seleção do cartão, tente selecionar outro e depois o atual novamente");
-        }
-
-        BigDecimal total = pedido.getTotalBigDecimal();
-        if(totalPag.toString() == total.toString()) return new ValidationResult(false, "O valor total nos cartões não corresponde ao total da compra.");
-
-        return new ValidationResult(true,null);
-    }
-
     public void cancelarPedido(Pedido pedido){
         for(ItemCompra item : pedido.getItens()){
             item.setQntDevolvida(item.getQnt());
@@ -77,7 +58,7 @@ public class PedidoService {
         retornoMercadoria.setPedido(pedido);
         retornoMercadoria.setTipo(TipoRetornoMercadoria.TROCA);
         retornoMercadoria.setMotivo("CANCELAMENTO DE PEDIDO");
-        retornoMercadoria.setValor(new BigDecimal(pedido.getTotal()));
+        retornoMercadoria.setValor(pedido.getTotal());
         retornoMercadoria.setQnt(1);
         retornoMercadoria.setStatus(StatusRetMercadoria.PRODUTOS_RECEBIDOS);
         retornoMercadoria = retornoMercadoriaService.save(retornoMercadoria);
@@ -97,5 +78,25 @@ public class PedidoService {
         return new ValidationResult(true,"");
     }
 
+    public ValidationResult validarPedido(Pedido pedido){
+        if(! pedido.getCupons().isEmpty()){
+            Boolean areCuponsValid = pedido.getCupons().stream().map(cupom -> cupomService.validarCupom(cupom, pedido.getCliente().getId())).reduce((aBoolean, aBoolean2) -> aBoolean && aBoolean2).orElse(true);
+            if(! areCuponsValid){
+                return new ValidationResult(false,"Cupom invalido");
+            }
+        }
+        if(pedido.getEnderecoEntrega() == null) return new ValidationResult(false, "Informe um endereço válido");
+        if(pedido.getItens().isEmpty()) return new ValidationResult(false, "O pedido deve ter ao menos um item");
+        BigDecimal totalPag = new BigDecimal(0);
+        for(Pagamento pagamento : pedido.getPagamentoList()){
+            totalPag = totalPag.add(pagamento.getValor());
+            if(pagamento.getCartao() == null) return new ValidationResult(false, "Houve um erro na seleção do cartão, tente selecionar outro e depois o atual novamente");
+        }
+
+        BigDecimal total = pedido.getTotal();
+        if(totalPag.toString() == total.toString()) return new ValidationResult(false, "O valor total nos cartões não corresponde ao total da compra.");
+
+        return new ValidationResult(true,null);
+    }
 
 }

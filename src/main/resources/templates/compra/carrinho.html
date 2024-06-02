@@ -88,8 +88,6 @@
 								<p th:text="${'Bairro: ' + pedido.getEnderecoEntrega().getBairro()}"></p>
 								<p th:text="${'Cidade: ' + pedido.getEnderecoEntrega().getCidade().getNome()}"></p>
 								<p th:text="${'UF: ' + pedido.getEnderecoEntrega().getCidade().getUf()}"></p>
-								<a href="/carrinho/selecionarEndereco" class="btn" role="button"
-									style="background-color: rgb(28, 71, 101); color: white;">Trocar</a>
 							</div>
 						</div>
 					</div>
@@ -132,13 +130,10 @@
 						<h5>Cupom</h5>
 					</div>
 					<div class="card-body">
-						<form action="/carrinho/addCupom" method="post" th:if="${pedido.getCupom() == null}">
+						<form action="/carrinho/addCupom" method="post">
 							<input id="txbCupom" type="text" name="nome" class="form-control" placeholder="Cupom de Desconto" />
 							<button id="btnAplicarCupom" type="submit" class="btn btn-block mt-3" style="background-color: rgb(28, 71, 101); color: white;">Aplicar</button>
 						</form>
-						<div th:if="${pedido.getCupom() != null}" >
-							<a href="/carrinho/removerCupom" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;"><i class="bi bi-trash"></i></a>
-						</div>
 					</div>
 				</div>
 				<br>
@@ -153,9 +148,12 @@
 								<div class="col">Frete</div>
 								<div id="frete" class="col" th:text="${#numbers.formatCurrency(pedido.getFrete())}"></div>
 							</div>
-							<div class="row" th:if="${pedido.getCupom() != null}">
-								<div class="col" th:text="${'Cupom-' + pedido.getCupom().getNome()}"></div>
-								<div id="cupom" class="col" th:text="${#numbers.formatCurrency(pedido.getDesconto() * -1)}"></div>
+							<div class="row" th:if="${pedido.getCupons().size()>0}" th:each="cupom : ${pedido.getCupons()}">
+								<div class="col" th:text="${'Cupom-' + cupom.getNome()}"></div>
+								<div class="col" th:text="${#numbers.formatCurrency(cupom.getDesconto() * -1)}"></div>
+								<div class="col">
+									<a th:href="@{'/carrinho/removerCupom/' + ${cupom.getId()}}" style="font-size: smaller">[Remover]</a>
+								</div>
 							</div>
 
 						</div>

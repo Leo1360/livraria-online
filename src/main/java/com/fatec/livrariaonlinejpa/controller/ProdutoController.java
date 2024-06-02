@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -31,5 +32,13 @@ public class ProdutoController {
         model.addAttribute("item", new AddCarrinhoItemDTO());
         return "/pesquisa";
     }
+
+    @GetMapping("/produto/{id}")
+    public String getProduto(HttpSession session, Model model, @PathVariable long id){
+        model.addAttribute("produto",produtoService.findById(id));
+        model.addAttribute("newItem",new AddCarrinhoItemDTO(id));
+        return "produto";
+    }
+
 
 }
