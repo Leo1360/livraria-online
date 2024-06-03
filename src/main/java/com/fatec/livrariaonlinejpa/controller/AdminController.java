@@ -3,14 +3,22 @@ package com.fatec.livrariaonlinejpa.controller;
 import com.fatec.livrariaonlinejpa.model.Pedido;
 import com.fatec.livrariaonlinejpa.model.StatusPedido;
 import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
+import com.fatec.livrariaonlinejpa.services.AdmService;
 import com.fatec.livrariaonlinejpa.services.PedidoService;
 import com.fatec.livrariaonlinejpa.services.RetornoMercadoriaService;
+import com.fatec.livrariaonlinejpa.util.RelatorioVendas;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -19,6 +27,7 @@ import java.util.List;
 public class AdminController {
     private final PedidoService pedidoService;
     private final RetornoMercadoriaService retornoMercadoriaService;
+    private final AdmService admService;
 
     @GetMapping("/perfil")
     public String home(HttpSession session){
@@ -64,5 +73,22 @@ public class AdminController {
         retornoMercadoriaService.sinalizarRecebimento(id);
         return "redirect:/adm/pedidos";
     }
+
+    @GetMapping("/getrelatorio")
+    public ResponseEntity<RelatorioVendas> getRelatorio(@RequestParam("dataini") String dataIniStr, @RequestParam("dataend") String dataEndStr){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        RelatorioVendas relatorio = null;
+        try{
+            Date dataIni = formatter.parse(dataIniStr);
+            Date dataEnd = formatter.parse(dataEndStr);
+            relatorio = admService.getRelatorioVendas(dataIni,
+                    dataEnd);
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResponseEntity<RelatorioVendas>(relatorio,HttpStatus.OK);
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.fatec.livrariaonlinejpa.services;
 
 import com.fatec.livrariaonlinejpa.model.*;
 import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
+import com.fatec.livrariaonlinejpa.util.DataPoint;
 import com.fatec.livrariaonlinejpa.util.ValidationResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -98,5 +100,11 @@ public class PedidoService {
 
         return new ValidationResult(true,null);
     }
+
+    public List<DataPoint> getSalesHistory(long idProduto, Date iniDate, Date endDate){
+        return repo.getSalesReport(idProduto,iniDate,endDate);
+    }
+
+
 
 }
