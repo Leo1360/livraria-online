@@ -5,6 +5,7 @@ import com.fatec.livrariaonlinejpa.model.StatusPedido;
 import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
 import com.fatec.livrariaonlinejpa.services.AdmService;
 import com.fatec.livrariaonlinejpa.services.PedidoService;
+import com.fatec.livrariaonlinejpa.services.ResumoVendasService;
 import com.fatec.livrariaonlinejpa.services.RetornoMercadoriaService;
 import com.fatec.livrariaonlinejpa.util.RelatorioVendas;
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +29,7 @@ public class AdminController {
     private final PedidoService pedidoService;
     private final RetornoMercadoriaService retornoMercadoriaService;
     private final AdmService admService;
+    private final ResumoVendasService resumoVendasService;
 
     @GetMapping("/perfil")
     public String home(HttpSession session){
@@ -81,7 +83,7 @@ public class AdminController {
         try{
             Date dataIni = formatter.parse(dataIniStr);
             Date dataEnd = formatter.parse(dataEndStr);
-            relatorio = admService.getRelatorioVendas(dataIni,
+            relatorio = resumoVendasService.getRelatVenda(dataIni,
                     dataEnd);
 
         } catch (ParseException e) {
