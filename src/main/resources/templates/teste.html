@@ -8,7 +8,10 @@
 <body>
 <input type="date" id="dataIni">
 <input type="date" id="dataEnd">
-<button onclick="updateGraph()">Atulizar</button>
+<button id="btDia" onclick="agruparDados()">Por dia</button>
+<button id="btSem" onclick="agruparDados('s')">Por Semana</button>
+<button id="btMes" onclick="agruparDados('m')">Por Mes</button>
+<h1 id="titulo"></h1>
 <div style="height: 50%; width: 50%;">
 	<canvas id="myChart"></canvas>
 </div>
@@ -35,9 +38,7 @@
 
 	var grafico = new Chart(ctx,cfg);
 
-	function updateGraph(){
-		let iniDate = document.getElementById("dataIni").value;
-		let endDate = document.getElementById("dataEnd").value;
+	function updateGraph(grouping, iniDate, endDate){
 
 		const myHeaders = new Headers();
 		myHeaders.append("Accept", "application/json");
@@ -48,9 +49,14 @@
 			redirect: "follow"
 		};
 
+		var url = '/adm/getrelatorio?dataini=' + iniDate + "&dataend=" + endDate;
+
+		if(grouping !== undefined){
+			url = url + "&agrupamento=" + grouping;
+		}
 
 		//fetch('https://run.mocky.io/v3/869f0565-e119-4f33-a685-7ae27f098143') //mock
-		fetch('/adm/getrelatorio?dataini=' + iniDate + "&dataend=" + endDate,requestOptions)
+		fetch(url,requestOptions)
 				.then(function (response) {
 					return dataset = response.json();
 				})
@@ -60,6 +66,31 @@
 				});
 	}
 
+
+	function agruparDados(grouping){
+		let iniDate = document.getElementById("dataIni").value;
+		let endDate = document.getElementById("dataEnd").value;
+		if(iniDate == null || iniDate === undefined || endDate == null || endDate === undefined){
+			alert("As datas precisam ser preenchidas");
+			return;
+		}
+		if(iniDate>endDate){
+			alert("A data final não pode ser menor que a inicial")
+			return;
+		}
+
+		var tipoagrupamento;
+		if(grouping === undefined){
+			tipoagrupamento = "Dia";
+		}else if(grouping == "s"){
+			tipoagrupamento = "Semana";
+		}else if(grouping == "m"){
+			tipoagrupamento = "Mês"
+		}
+
+		document.getElementById("titulo").textContent = "Vendas por " + tipoagrupamento;
+		updateGraph(grouping, iniDate, endDate);
+	}
 
 </script>
 

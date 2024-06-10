@@ -25,7 +25,8 @@ public class ScheduledTask {
     public void gerarRelatorioDiario(){
         List<Produto> produtos = produtoService.findAll();
 //        Date yesterday = DateUtils.yesterday();
-        Date yesterday = DateUtils.dateOf("2024-05-27");
+        LocalDate yesterday = LocalDate.of(2024,04,05);
+
         for(Produto prod: produtos){
             int qnt = admService.getDailyAmoutOfSales(prod.getId(), yesterday);
             ResumoVenda resumo = new ResumoVenda(prod,yesterday,qnt);

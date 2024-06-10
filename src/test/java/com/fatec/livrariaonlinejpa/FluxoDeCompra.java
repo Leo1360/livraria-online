@@ -27,19 +27,6 @@ class FluxoDeCompra {
     PedidoRepository repo;
 
 
-
-    @Test
-    void chamaProc(){
-        Date iniDate = new Date("2024-04-01");
-        Date endDate = new Date("2024-06-03");
-        List<DataPoint> retorno = repo.getSalesReport(1l,iniDate, endDate);
-        for(DataPoint p:retorno){
-            System.out.println(p);
-        }
-
-    }
-
-
     @Test
     void cadastrarProduto(){
         Produto produto = new Produto();

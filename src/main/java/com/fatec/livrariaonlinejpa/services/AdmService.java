@@ -8,6 +8,7 @@ import com.fatec.livrariaonlinejpa.util.RelatorioVendas;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,20 +19,7 @@ public class AdmService {
     private final ProdutoService produtoService;
     private final PedidoRepository pedidoRepository;
 
-    public RelatorioVendas getRelatorioVendas(Date iniDate, Date endDate){
-        RelatorioVendas relatorio = new RelatorioVendas();
-        List<Produto> produtos = produtoService.findAll();
-        for(Produto p: produtos){
-            DataSet dataSet = new DataSet();
-            dataSet.setData(pedidoService.getSalesHistory(p.getId(),iniDate, endDate));
-            System.out.println(dataSet);
-            dataSet.setLabel(p.getNome());
-            relatorio.getRelatorio().add(dataSet);
-        }
-        return relatorio;
-    }
-
-    public int getDailyAmoutOfSales(long prdId,Date date){
+    public int getDailyAmoutOfSales(long prdId, LocalDate date){
         return pedidoRepository.getSalesByDay(prdId,date);
     }
 }

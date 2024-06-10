@@ -2,17 +2,18 @@ package com.fatec.livrariaonlinejpa.util;
 
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
 public class DataPoint {
-    private Date x;
+    private String x;
     private int y;
 
     public DataPoint() {
     }
 
-    public DataPoint(Date x, int y) {
+    public DataPoint(String x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -23,5 +24,9 @@ public class DataPoint {
                 "data=" + x +
                 ", valor=" + y +
                 '}';
+    }
+
+    public void addY(int val){
+        this.y += val;
     }
 }

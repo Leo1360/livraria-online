@@ -101,9 +101,6 @@ public class PedidoService {
         return new ValidationResult(true,null);
     }
 
-    public List<DataPoint> getSalesHistory(long idProduto, Date iniDate, Date endDate){
-        return repo.getSalesReport(idProduto,iniDate,endDate);
-    }
 
 
 

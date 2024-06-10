@@ -3,6 +3,7 @@ package com.fatec.livrariaonlinejpa.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -13,13 +14,13 @@ public class ResumoVenda {
     private long id;
     @ManyToOne
     private Produto produto;
-    private Date date;
+    private LocalDate date;
     private int qntVendas;
 
     public ResumoVenda() {
     }
 
-    public ResumoVenda(Produto produto, Date date, int qntVendas) {
+    public ResumoVenda(Produto produto, LocalDate date, int qntVendas) {
         this.produto = produto;
         this.date = date;
         this.qntVendas = qntVendas;

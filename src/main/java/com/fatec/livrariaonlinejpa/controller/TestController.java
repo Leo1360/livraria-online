@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +25,7 @@ public class TestController {
 
     @GetMapping("/test")
     public String teste(){
-        RelatorioVendas relat = service.getRelatVenda(DateUtils.dateOf("2024-04-01"), DateUtils.dateOf("2024-06-01"));
-        System.out.println(relat);
+
         return "/teste";
     }
 }

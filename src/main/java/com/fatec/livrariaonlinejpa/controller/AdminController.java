@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -76,21 +77,23 @@ public class AdminController {
         return "redirect:/adm/pedidos";
     }
 
-    @GetMapping("/getrelatorio")
-    public ResponseEntity<RelatorioVendas> getRelatorio(@RequestParam("dataini") String dataIniStr, @RequestParam("dataend") String dataEndStr){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        RelatorioVendas relatorio = null;
-        try{
-            Date dataIni = formatter.parse(dataIniStr);
-            Date dataEnd = formatter.parse(dataEndStr);
-            relatorio = resumoVendasService.getRelatVenda(dataIni,
-                    dataEnd);
+    @GetMapping("/relatorio")
+    public String paginaRelatorio(){
+        return "/admin/admin_relatorio";
+    }
 
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
+        @GetMapping("/getrelatorio")
+    public ResponseEntity<RelatorioVendas> getRelatorio(@RequestParam("dataini") LocalDate dataIni, @RequestParam("dataend") LocalDate dataEnd, @RequestParam(name = "agrupamento", required = false) String agrupamento){
+        RelatorioVendas relatorio = null;
+        if(agrupamento == null){
+            relatorio = resumoVendasService.getRelatVenda(dataIni, dataEnd);
+        }else {
+            relatorio = resumoVendasService.getRelatAgrupado(dataIni, dataEnd, agrupamento);
         }
         return new ResponseEntity<RelatorioVendas>(relatorio,HttpStatus.OK);
     }
+
+
 
 
 }

@@ -41,51 +41,105 @@
 
         <div class="row">
             <div class="col col-md-3">
-                <label for="inicio">Data inicio</label>
-                <input type="date" name="inicio" id="inicio">
-
+                <label for="dataIni">Data inicio</label>
+                <input id="dataIni" type="date" name="inicio">
             </div>
             <div class="col col-md-3">
+                <label for="dataEnd">Data Fim</label>
+                <input id="dataEnd" type="date" name="fim">
+            </div>
 
-                <label for="fim">Data Fim</label>
-                <input type="date" name="fim" id="fim">
+            <div class="col">
+                <button id="btDia" onclick="agruparDados()" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Por dia</button>
             </div>
-            <div class="col col-md-3">
-                <button class="btn" style="background-color: rgb(28, 71, 101); color: white;"> Gerar Gráfico</button>
+            <div class="col">
+                <button id="btSem" onclick="agruparDados('s')" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Por Semana</button>
             </div>
+            <div class="col">
+                <button id="btMes" onclick="agruparDados('m')" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Por Mes</button>
+            </div>
+            
         </div>
 
+        <h1 id="titulo"></h1>
         <div>
             <canvas id="myChart"></canvas>
         </div>
 
-        <script>
-            const ctx = document.getElementById('myChart').getContext('2d');
-            const data = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Data Set',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            };
-
-            const config = {
+        <script>    
+            const ctx = document.getElementById('myChart');   
+            const cfg = {
                 type: 'line',
-                data: data,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+                data: {
+                    datasets: []
                 }
             };
-
-            new Chart(ctx, config);
-
+        
+            // [{
+            //     "label":"Produto 1",
+            //     "data":[{"x":"2016-12-25","y":20},{"x":"2016-12-26","y":10},{"x":"2016-12-27","y":11}]
+            // },
+            // {
+            //     "label":"Produto 2",
+            //     "data":[{"x":"2016-12-25","y":10},{"x":"2016-12-26","y":15},{"x":"2016-12-27","y":21}]
+            // }]
+        
+            var grafico = new Chart(ctx,cfg);
+        
+            function updateGraph(grouping, iniDate, endDate){
+        
+                const myHeaders = new Headers();
+                myHeaders.append("Accept", "application/json");
+        
+                const requestOptions = {
+                    method: "GET",
+                    headers: myHeaders,
+                    redirect: "follow"
+                };
+        
+                var url = '/adm/getrelatorio?dataini=' + iniDate + "&dataend=" + endDate;
+        
+                if(grouping !== undefined){
+                    url = url + "&agrupamento=" + grouping;
+                }
+        
+                //fetch('https://run.mocky.io/v3/869f0565-e119-4f33-a685-7ae27f098143') //mock
+                fetch(url,requestOptions)
+                        .then(function (response) {
+                            return dataset = response.json();
+                        })
+                        .then(function (dataset){
+                            cfg.data.datasets = dataset.relatorio;
+                            grafico.update();
+                        });
+            }
+        
+        
+            function agruparDados(grouping){
+                let iniDate = document.getElementById("dataIni").value;
+                let endDate = document.getElementById("dataEnd").value;
+                if(iniDate == null || iniDate === undefined || endDate == null || endDate === undefined){
+                    alert("As datas precisam ser preenchidas");
+                    return;
+                }
+                if(iniDate>endDate){
+                    alert("A data final não pode ser menor que a inicial")
+                    return;
+                }
+        
+                var tipoagrupamento;
+                if(grouping === undefined){
+                    tipoagrupamento = "Dia";
+                }else if(grouping == "s"){
+                    tipoagrupamento = "Semana";
+                }else if(grouping == "m"){
+                    tipoagrupamento = "Mês"
+                }
+        
+                document.getElementById("titulo").textContent = "Vendas por " + tipoagrupamento;
+                updateGraph(grouping, iniDate, endDate);
+            }
+        
         </script>
 
 
