@@ -16,6 +16,10 @@ import java.util.List;
 public class ProdutoService {
     private final ProdutoRepository repo;
 
+    public List<Produto> findAll(){
+        return repo.findAll();
+    }
+
     public Produto findById(long id){
         return repo.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Produto not found"));
     }

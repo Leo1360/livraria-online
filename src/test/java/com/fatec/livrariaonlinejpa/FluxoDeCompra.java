@@ -1,15 +1,18 @@
 package com.fatec.livrariaonlinejpa;
 
 import com.fatec.livrariaonlinejpa.model.*;
+import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
 import com.fatec.livrariaonlinejpa.services.PedidoService;
 import com.fatec.livrariaonlinejpa.services.ProdutoService;
+import com.fatec.livrariaonlinejpa.util.DataPoint;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -20,6 +23,9 @@ class FluxoDeCompra {
     ProdutoService produtoService;
     @Autowired
     ClienteService clienteService;
+    @Autowired
+    PedidoRepository repo;
+
 
     @Test
     void cadastrarProduto(){
