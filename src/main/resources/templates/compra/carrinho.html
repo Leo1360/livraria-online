@@ -168,6 +168,31 @@
 				</div>
 			</div>
 		</div>
+		<br>
+		<h2>Recomendações</h2>
+		<hr>
+		<div class="row">
+			<div class="card" th:each="item:${recomendacoes}" style="max-width: 230px">
+				<div class="card-img-top text-center" >
+					<a th:href="@{'/produto/' + ${item.id}}" >
+						<img th:src="@{${item.getPathImg()}}" class="img-thumbnail" style="max-width: 150px">
+					</a>
+
+				</div>
+
+				<div class="card-body">
+					<h5 th:text="${#strings.abbreviate(item.getNome(),35)}"></h5>
+					<p th:text="${#numbers.formatCurrency(item.valor)}"></p>
+					<form th:action="@{/carrinho/addItem}" method="post" th:object="${item}">
+						<input type="hidden" name="id" th:value="${item.getId()}">
+						<input type="hidden" name="qnt" value="1">
+						<button type="submit" class="btn" style="background-color: rgb(28, 71, 101); color: white;">
+							Adicionar ao carrinho
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
 	</div>
 		<script>
 			function editPagamento(id){

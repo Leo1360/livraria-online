@@ -23,12 +23,12 @@ public class Produto {
     private String ano;
     private String autor;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<CategoriaLivro> categoria;
 
     private String editora;
     private String edicao;
-    private int numneroPaginas;
+    private int numeroPaginas;
     private String isbn;
     private String cogBarras;
     private String dimensao;
