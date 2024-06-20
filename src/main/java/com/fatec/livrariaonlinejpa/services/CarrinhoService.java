@@ -226,81 +226,10 @@ public class CarrinhoService {
         return pedido;
     }
 
-    public List<Produto> getRecomendacoes(List<ItemCompra> itens){
-        List<Produto> compras = itens.stream().map(ItemCompra::getProduto).collect(Collectors.toList());
-        List<Produto> livrosDaCat = produtoService.findAll();
-        for(Produto prd: compras){
-            for(Produto prod:livrosDaCat){
-                if(prod.getId() == prd.getId()){
-                    livrosDaCat.remove(prod);
-                    break;
-                }
-            }
-        }
-        String body = getBody(compras, livrosDaCat);
-
-        Optional<String> optReponse = sendRequestGPT(body);
-
-        List<Produto> resultList = new ArrayList<>();
-        if(optReponse.isPresent()){
-            JSONObject json = new JSONObject(optReponse.get());
-
-            String res = json.getJSONArray("choices")
-                    .getJSONObject(0)
-                    .getJSONObject("message")
-                    .getString("content");
-
-            String[] livros = res.split(";");
-            resultList =  livrosDaCat.stream()
-                    .filter(l -> Arrays.stream(livros)
-                            .anyMatch(string -> Long.parseLong(string) == l.getId()))
-                    .toList();
-        }
-        return resultList;
-    }
-
-    private static Optional<String> sendRequestGPT(String body) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.openai.com/v1/chat/completions"))
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer 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")
-                .POST(HttpRequest.BodyPublishers.ofString(body))
-                .build();
-
-        HttpClient client = HttpClient.newHttpClient();
-        try {
-            return Optional.of(client.send(request, HttpResponse.BodyHandlers.ofString()).body());
-        } catch (IOException | InterruptedException e) {
-            return Optional.empty();
-        }
-
-    }
-
-    private String getBody(List<Produto> compras, List<Produto> livrosDaCat){
-        StringBuilder livros = new StringBuilder();
-        for(Produto prod: compras){
-            livros.append(prod.getNome()).append(",");
-        }
-
-        StringBuilder opcoes = new StringBuilder();
-        for(Produto prod: livrosDaCat){
-            opcoes.append(prod.getId()).append(" - ").append(prod.getNome()).append(";\\n ");
-        }
-        String content = opcoes + "\\n Os livros citados acima estão acompanhados de sua numeração, que esta dentro dos parênteses.\\n Dados todos os livros citados a cima, retorne os 5 títulos que mais se conectam e fazem sentido serem comprados juntos com os livros '" + livros + "'.\\n Responda apenas as numerações sem parênteses e separadas por ';' sem nenhuma explicação dos motivos, apenas os numeros.";
-
-        StringBuilder body =  new StringBuilder();
-        body.append("""
-                {
-                    "model": "gpt-4o",
-                    "messages": [
-                      {
-                        "role": "user",
-                        "content": \"""");
-        body.append(content).append("\"}]}");
-        return body.toString();
 
 
-    }
+
+
 
 
 }

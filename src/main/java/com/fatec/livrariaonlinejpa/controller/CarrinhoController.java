@@ -53,8 +53,6 @@ public class CarrinhoController {
 
         carrinhoService.addItem(pedido,itemDto);
 
-        List<Produto> recomendacoes = carrinhoService.getRecomendacoes(pedido.getItens());
-        session.setAttribute("recomendacoes", recomendacoes);
 
         session.setAttribute("pedido", pedido);
         return "redirect:/carrinho/show";
@@ -72,11 +70,6 @@ public class CarrinhoController {
     public String removeItemCarrinho(HttpSession session ,@PathVariable long idProduto){
         Pedido pedido = (Pedido) session.getAttribute("pedido");
         carrinhoService.removerItem(pedido, idProduto);
-
-        if(! pedido.getItens().isEmpty()){
-            List<Produto> recomendacoes = carrinhoService.getRecomendacoes(pedido.getItens());
-            session.setAttribute("recomendacoes", recomendacoes);
-        }
 
         session.setAttribute("pedido", pedido);
         return "redirect:/carrinho/show";
@@ -121,20 +114,12 @@ public class CarrinhoController {
     @GetMapping("/show")
     public String getCarrinho(HttpSession session, Model model){
         Pedido pedido = (Pedido) session.getAttribute("pedido");
-        List<Produto> recomendacoes = (List<Produto>) session.getAttribute("recomendacoes");
         String alert = (String) session.getAttribute("alert");
         model.addAttribute("alert",alert);
         session.removeAttribute("alert");
         long clientId = (Long) session.getAttribute("clienteId");
 
         pedido = carrinhoService.getCarrinho(pedido,clientId);
-        if(! pedido.getItens().isEmpty()){
-            if(recomendacoes == null){
-                recomendacoes = carrinhoService.getRecomendacoes(pedido.getItens());
-            }
-            model.addAttribute("recomendacoes", recomendacoes);
-        }
-
 
         session.setAttribute("pedido", pedido);
         model.addAttribute("pedido",pedido);
@@ -169,14 +154,6 @@ public class CarrinhoController {
         pedidoService.salvarNovoPedido(pedido);
         session.removeAttribute("pedido");
         return "redirect:/pedido/cliente";
-    }
-
-    //public ResponseEntity<List<Produto>> getRecomendacoes(){
-    @GetMapping("/recomendacao")
-    public String getRecomendacoes(HttpSession session){
-        Pedido pedido = (Pedido) session.getAttribute("pedido");
-        carrinhoService.getRecomendacoes(pedido.getItens());
-        return "redirect:/home";
     }
 
 }
