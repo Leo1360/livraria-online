@@ -33,6 +33,9 @@ public class RecomendacoesController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
-
+    @GetMapping("/show")
+    public String show(HttpSession session){
+        return "recomendacao";
+    }
 
 }
