@@ -25,12 +25,11 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class TestController {
-    private final RecomendacoesService service;
+    private final ScheduledTask task;
 
     @GetMapping("/test")
     public String teste(HttpSession session){
-//        String gptMsg = service.iniciarChat(session);
-//        System.out.println(gptMsg);
+        task.gerarRelatorioDiario();
         return "/teste";
     }
 }

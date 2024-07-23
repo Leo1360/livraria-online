@@ -113,7 +113,9 @@
                             <div class="card-body">
                                 <p th:text="${'SubTotal: ' + #numbers.formatCurrency(pedido.getSubTotal())}" id="subtotal"></p>
                                 <p th:text="${'Frete: ' + #numbers.formatCurrency(pedido.getFrete())}" id="frete"></p>
-                                <p th:text="${'Cupom-' + pedido.getCupons().getNome()} + ${#numbers.formatCurrency(pedido.getDesconto() * -1)}" th:if="${pedido.getCupons() != null}"></p>
+
+                                <p th:text="${'Cupom-' + cupom.getNome()} + ': ' + ${#numbers.formatCurrency(pedido.getDesconto() * -1)}" th:if="${pedido.getCupons() != null}" th:each="cupom : ${pedido.getCupons()}" ></p>
+
                                 <p th:text="${'Total: ' + #numbers.formatCurrency(pedido.getTotal())}"></p>
                                 <p th:text="${'Status: ' + pedido.getStatus().getTexto()}"></p>
                                 <form action="/pedido/cancelar" method="post" th:if="${trocas.size() == 0 && (pedido.getStatus().toString() == 'EM_PROCESSAMENTO' || pedido.getStatus().toString() == 'PAGAMENTO_REALIZADO' )}">

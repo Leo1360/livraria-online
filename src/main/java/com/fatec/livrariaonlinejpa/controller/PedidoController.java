@@ -35,8 +35,9 @@ public class PedidoController {
     @GetMapping("/{id}")
     public String getDetalhesPedido(HttpSession session,@PathVariable Long id, Model model){
         Pedido pedido = pedidoService.findById(id);
+        List<RetornoMercadoria> retornos = retornoMercadoriaService.findByPedidId(id);
         model.addAttribute("pedido", pedido);
-        model.addAttribute("trocas", retornoMercadoriaService.findByPedidId(id));
+        model.addAttribute("trocas", retornos);
         return "/cliente/pedido";
 
     }
