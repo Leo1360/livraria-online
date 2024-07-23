@@ -3,12 +3,22 @@ package com.fatec.livrariaonlinejpa.services;
 import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
 import com.fatec.livrariaonlinejpa.dto.EnderecoDTO;
 import com.fatec.livrariaonlinejpa.model.*;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -103,7 +113,7 @@ public class CarrinhoService {
 
     public void addItem(Pedido pedido, AddCarrinhoItemDTO itemDto){
         ItemCompra novoItem = new ItemCompra();
-        Produto produto = produtoService.getReferenceById(itemDto.getId());
+        Produto produto = produtoService.findById(itemDto.getId());
         novoItem.setProduto(produto);
         novoItem.setQnt(itemDto.getQnt());
         novoItem.setValorUnit(produto.getValor());
@@ -215,5 +225,11 @@ public class CarrinhoService {
         pedido.addPagamento(pag);
         return pedido;
     }
+
+
+
+
+
+
 
 }

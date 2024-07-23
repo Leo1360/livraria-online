@@ -9,12 +9,14 @@ import com.fatec.livrariaonlinejpa.services.ProdutoService;
 import com.fatec.livrariaonlinejpa.util.ValidationResult;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,6 +53,7 @@ public class CarrinhoController {
 
         carrinhoService.addItem(pedido,itemDto);
 
+
         session.setAttribute("pedido", pedido);
         return "redirect:/carrinho/show";
     }
@@ -60,7 +63,6 @@ public class CarrinhoController {
         Pedido pedido = (Pedido) session.getAttribute("pedido");
         carrinhoService.editQntItem(pedido, itemDto.toItemIdAndQnt());
         session.setAttribute("pedido", pedido);
-
         return "redirect:/carrinho/show";
     }
 
