@@ -42,7 +42,7 @@
             </div>
             <div class="card-body">
 
-                <form id="formCartao" role="form" method="post" th:action="@{/cliente/addCartao}" th:object="${cartao}">
+                <form id="formCartao" role="form" method="post" th:action="@{/cartao/addCartao}" th:object="${cartao}">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="digitos">Numero do cartão</label>
@@ -75,10 +75,10 @@
     </div>
     <script th:inline="javascript">
         /*<![CDATA[*/
-        //var edit = [[${ onEdit }]];
+        var edit = [[${ onEdit }]];
         /*]]>*/
         if (edit != null) {
-            document.getElementById("formCartao").action = "/cliente/addCartao?onEdit=1";
+            document.getElementById("formCartao").action = "/cartao/addCartao?onEdit=1";
         }
     </script>
 
