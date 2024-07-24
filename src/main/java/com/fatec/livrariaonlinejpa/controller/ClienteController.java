@@ -39,20 +39,6 @@ public class ClienteController {
         session.setAttribute("clienteId", id);
         return "redirect:/cliente/perfil";
     }
-    
-    
-    // Telas de exibição
-    @GetMapping("/cartoes")
-    public String listarCartoes(HttpSession session,Model model) {
-        if(session.getAttribute("clienteId") == null){
-            return "redirect:/cliente/novo";
-        }
-        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
-        model.addAttribute("listCartoes", cliente.getCartoes());
-        return "cliente/cartoes";
-    }
-    
-
 
     @GetMapping("/perfil")
     public String mostrarCliente(HttpSession session,Model model) {
@@ -65,9 +51,6 @@ public class ClienteController {
         return "/cliente/perfil";
     }
 
-
-
-    // Telas de cadastro/forms
     @GetMapping("/novo")
     public String novocliente(HttpSession session,Model model) {
         Cliente cliente = new Cliente();
@@ -82,44 +65,14 @@ public class ClienteController {
         return "cliente/editar_cliente";
     }
 
-    @GetMapping("/cadastrarcartao")
-    public String cadastroCartao(HttpSession session,Model model, @RequestParam(name = "onEdit", required = false) String onEdit) {
-        Cartao cartao = new Cartao();
-        model.addAttribute("cartao", cartao);
-        model.addAttribute("onEdit", onEdit);
-        return "cliente/cadastrar_cartao";
-    }
-
-
-
-
-    // --------------------create----------------------------
-
     @PostMapping("/cadastrarCliente")
     public String cadastrarCliente(HttpSession session, @ModelAttribute("cliente") Cliente cliente) {
         // salvando cliente
         clienteService.save(cliente);
         // salvando id do cliente na sessão
         session.setAttribute("clienteId", cliente.getId());
-        return "redirect:/cliente/cadastrarcartao";
+        return "redirect:/cartao/cadastrarcartao";
     }
-
-    @PostMapping("/addCartao")
-    public String addCartao(HttpSession session, @ModelAttribute("cartao") Cartao cartao, @RequestParam(name = "onEdit", required = false) String onEdit) {
-        // salvando cliente
-        long clientid = (long)session.getAttribute("clienteId");
-        clienteService.addCartao(clientid,cartao);
-        // salvando id do cliente na sessão
-        if(onEdit != null){
-            return "redirect:/cliente/cartoes";
-        }
-        clienteService.setCartaoPreferencial(clientid, cartao.getId());
-        return "redirect:/endereco/cadastrar";
-    }
-    
-
-
-    // -------------------update----------------------------
 
     @PostMapping("/editCliente")
     public String editCliente(HttpSession session, @ModelAttribute("cliente") Cliente cliente) {
@@ -127,15 +80,6 @@ public class ClienteController {
         clienteService.update(cliente);
         return "redirect:perfil";
     }
-
-    // ------------------DELETE------------------------
-
-    @GetMapping("/deleteCartao")
-    public String  deleteCartao(HttpSession session,@RequestParam(name = "id") Long id){
-        clienteService.removeCartao((long)session.getAttribute("clienteId"), id);
-        return "redirect:/cliente/cartoes";
-    }
-
 
     @GetMapping("/deletarConta")
     public String deletarConta(HttpSession session) {
