@@ -43,7 +43,7 @@
             </div>
             <div class="card-body">
 
-                <form id="formEndereco" role="form" method="post" th:action="@{/cliente/addEndereco}"
+                <form id="formEndereco" role="form" method="post" th:action="@{/endereco/salvar}"
                     th:object="${endereco}">
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -98,7 +98,7 @@
         var edit = [[${ onEdit }]];
         /*]]>*/
         if (edit != null) {
-            document.getElementById("formEndereco").action = "/cliente/addEndereco?onEdit=1";
+            document.getElementById("formEndereco").action = "/endereco/salvar?onEdit=1";
         }
     </script>
 </body>
