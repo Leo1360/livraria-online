@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Livraria Online</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light justify-content-between"
+		style="background-color: rgb(28, 71, 101);">
+		<a class="navbar-brand" href="/home" style="color: white;">Livraria Online</a>
+		<form id="formBusca" action="/find" method="get" class="navbar-form" style="width: 50%;">
+			<div class="input-group">
+				<input form="formBusca" id="query" name="query" type="text" class="form-control" placeholder="Buscar ...">
+				<div class="input-group-btn">
+					<button id="btPesquisar" form="formBusca" class="btn btn-default" type="submit">
+						<i class="bi bi-search" style="color: white;"></i>
+					</button>
+				</div>
+			</div>
+		</form>
+		<div class="navbar-nav">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="/carrinho/show" style="color: white;">Carrinho</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="/cliente/perfil" style="color: white;">Perfil</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-md-12">
+				<div id="initDiv" class="card" style="padding-bottom: 20px;padding-top: 20px;">
+					<div class="row" style="padding-bottom: 20px;">
+						<div class="mx-auto">
+							<p style="text-align: center;">
+								Para poder recomendar um livro preciso que responda a alguma perguntas.
+								<br>
+								Vamos começar?
+							</p>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="mx-auto">
+							<button class="btn" onclick="initChat()" style="background-color: rgb(28, 71, 101); color: white;">Iniciar</button>
+						</div>
+					</div>
+					<br>
+				</div>
+				<div id="interactionDiv" class="card" style="padding-bottom: 20px;padding-top: 20px;">
+					<div class="row" style="padding-bottom: 20px;">
+						<div id="pergunta" class="mx-auto" style="text-align: center;">
+							Pergunta da IA
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="mx-auto">
+							<input id="msg" type="text">
+							<button onclick="sendMsg()" class="btn" style="background-color: rgb(28, 71, 101); color: white;">enviar</button>
+						</div>
+					</div>
+					<br>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+
+	<script>
+		document.getElementById("interactionDiv").hidden = true;
+
+		var test = null;
+
+		function initChat(){
+			document.getElementById("initDiv").hidden = true;
+			
+
+			const myHeaders = new Headers();
+			myHeaders.append("Accept", "application/json");
+	
+			const requestOptions = {
+				method: "GET",
+				headers: myHeaders,
+				redirect: "follow"
+			};
+
+			var url = "/recomendacao/iniciar"
+
+			fetch(url,requestOptions)
+				.then(function (response) {
+					return dataset = response.json();
+				})
+				.then(function (dataset){
+					console.log(dataset);
+					document.getElementById("pergunta").innerText = dataset.msg;
+					document.getElementById("interactionDiv").hidden = false;
+				})
+
+		}
+
+		function sendMsg(){
+			var msg = document.getElementById("msg").value;
+
+			const myHeaders = new Headers();
+			myHeaders.append("Accept", "application/json");
+	
+			const requestOptions = {
+				method: "Post",
+				headers: myHeaders,
+				redirect: "follow",
+				body:msg
+			};
+
+			var url = "/recomendacao/sendMsg"
+
+			fetch(url,requestOptions)
+			.then(function (response) {
+				return dataset = response.json();
+			})
+			.then(function (obj){
+				document.getElementById("pergunta").innerHTML = obj.msg;
+				document.getElementById("msg").value = "";
+			})
+		}
+
+	</script>
+
+</body>
+
+</html>

@@ -12,9 +12,8 @@ public class Cartao{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String token;
-    private String bandeira;
+    private String digitos;
+    private String cvv;
+    private String vencimento;
     private String cpf;
-    private String digitosFinais;
-    private boolean preferencial;
 }

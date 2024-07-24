@@ -3,6 +3,7 @@ package com.fatec.livrariaonlinejpa.services;
 
 import java.util.Optional;
 
+import com.fatec.livrariaonlinejpa.repositories.CartaoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,10 +19,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClienteService {
     private final  ClienteRepository repo;
-    
+    private final CartaoRepository cartaoRepository;
 
-    public void save(Cliente cliente){
-        repo.save(cliente);
+    public Cliente save(Cliente cliente){
+        cliente = repo.save(cliente);
+        return cliente;
     }
 
     public Cliente findById(long id){
@@ -30,9 +32,9 @@ public class ClienteService {
     }
 
     public void addEnderecoEntrega(long idCliente, Endereco enderecoEntrega){
-        Cliente cliente = this.findById(idCliente);
+        Cliente cliente = repo.getReferenceById(idCliente);
         cliente.getEnderecosEntrega().add(enderecoEntrega);
-        save(cliente);
+        repo.save(cliente);
     }
 
     public void removeEnderecoEntrega(long idCliente, long idEndereco) {
@@ -48,9 +50,9 @@ public class ClienteService {
     
 
     public void addCartao(long idCliente, Cartao cartao){
-        Cliente cliente = findById(idCliente);
+        Cliente cliente = repo.getReferenceById(idCliente);
         cliente.getCartoes().add(cartao);
-        save(cliente);
+        repo.save(cliente);
     }
 
     public void removeCartao(long idCliente, long idCartao){
@@ -66,14 +68,8 @@ public class ClienteService {
 
     public void setCartaoPreferencial(long idCliente, long idCartao){
         Cliente cliente = this.findById(idCliente);
-        for (Cartao c : cliente.getCartoes()) {
-            if (c.getId() == idCartao) {
-                c.setPreferencial(true);
-            }else{
-               c.setPreferencial(false);  
-            }
-            
-        }
+        Cartao cartao = cartaoRepository.getReferenceById(idCartao);
+        cliente.setCartaoPreferencial(cartao);
         save(cliente);
     }
 
@@ -81,6 +77,8 @@ public class ClienteService {
         Cliente cliente = findById(newCliente.getId());
         //overwride all mutable fields
         cliente.setNome(newCliente.getNome() != null ? newCliente.getNome(): cliente.getNome());
+        cliente.setDataNascimento(newCliente.getDataNascimento() != null ? newCliente.getDataNascimento() : cliente.getDataNascimento());
+        cliente.setCpf(newCliente.getCpf() != null ? newCliente.getCpf() : cliente.getCpf());
 
         repo.save(cliente);
     }

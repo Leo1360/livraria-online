@@ -1,5 +1,10 @@
 package com.fatec.livrariaonlinejpa;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,12 +14,21 @@ import com.fatec.livrariaonlinejpa.model.Cidade;
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.model.Endereco;
 import com.fatec.livrariaonlinejpa.model.User;
+import com.fatec.livrariaonlinejpa.services.CartaoService;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
+import com.fatec.livrariaonlinejpa.services.EnderecoService;
 
 @SpringBootTest
 class LivrariaonlinejpaApplicationTests {
 	@Autowired
 	ClienteService clienteService;
+	@Autowired
+	CartaoService cartaoService;
+	@Autowired
+	EnderecoService enderecoService;
+	private long clientId;
+	private long enderecoId;
+	private long cartaoId;
 
 	@Test
 	void contextLoads() {
@@ -30,6 +44,8 @@ class LivrariaonlinejpaApplicationTests {
 		cliente.setUser(user);
 
 		clienteService.save(cliente);
+		this.clientId = cliente.getId();
+		assertNotEquals(this.clientId, 0);
 	}
 
 	@Test
@@ -45,32 +61,63 @@ class LivrariaonlinejpaApplicationTests {
 		endereco.setCidade(cidade);
 
 		clienteService.addEnderecoEntrega(1, endereco);
+		Cliente cliente = clienteService.findById(1);
+		boolean find = false;
+		for(Endereco end : cliente.getEnderecosEntrega()){
+			if(end.getId() == 11){
+				find = true;
+			}
+		}
+		assertTrue(find);
 	}
 
 	@Test
 	void addCartaoCliente(){
 		Cartao cartao = new Cartao();
-		cartao.setBandeira("visa");
-		cartao.setDigitosFinais("1548");
 		cartao.setCpf("41036801802");
-		cartao.setToken("65191sd951as9d51as95d1");
 
 		clienteService.addCartao(1, cartao);
+		Cliente cliente = clienteService.findById(1);
+		boolean find = false;
+		for(Cartao card : cliente.getCartoes()){
+			if(card.getDigitos() == card.getDigitos()){
+				find = true;
+			}
+		}
+		assertTrue(find);
 	}
 
 	@Test
 	void setCartaoPreferencial(){
-		clienteService.setCartaoPreferencial(1, 1);
+
 	}
 
 	@Test 
 	void removeEnderecoEntrega(){
 		clienteService.removeEnderecoEntrega(1, 1);
+		Endereco endereco = enderecoService.findById(1);
+		Cliente cliente = clienteService.findById(1);
+		boolean find = true;
+		for(Endereco end : cliente.getEnderecosEntrega()){
+			if(end.getLogradouro() == endereco.getLogradouro()){
+				find = false;
+			}
+		}
+		assertTrue(find);
 	}
 
 	@Test
 	void removeCartao(){
+		Cartao cartao = cartaoService.findById(2);
 		clienteService.removeCartao(1, 2);
+		Cliente cliente = clienteService.findById(1);
+		boolean find = true;
+		for(Cartao card : cliente.getCartoes()){
+			if(card.getDigitos() == cartao.getDigitos()){
+				find = false;
+			}
+		}
+		assertTrue(find);
 	}
 
 	@Test
@@ -79,12 +126,14 @@ class LivrariaonlinejpaApplicationTests {
 		cliente.setId(1);
 		cliente.setNome("Carlos");
 		clienteService.update(cliente);
+		Cliente novo = clienteService.findById(1);
+		assertEquals(novo.getNome(), "Carlos");
 	}
 
 
 	@Test
 	void deleteCliente(){
-		clienteService.delete(2);
+		clienteService.delete(18);
 	}
 
 

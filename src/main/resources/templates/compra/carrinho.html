@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Livraria Online</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light justify-content-between"
+	 style="background-color: rgb(28, 71, 101);">
+	<a class="navbar-brand" href="/home" style="color: white;">Livraria Online</a>
+	<form id="formBusca" action="/find" method="get" class="navbar-form" style="width: 50%;">
+		<div class="input-group">
+			<input form="formBusca" id="query" name="query" type="text" class="form-control" placeholder="Buscar ...">
+			<div class="input-group-btn">
+				<button id="btPesquisar" form="formBusca" class="btn btn-default" type="submit">
+					<i class="bi bi-search" style="color: white;"></i>
+				</button>
+			</div>
+		</div>
+	</form>
+	<div class="navbar-nav">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="/carrinho/show" style="color: white;">Carrinho</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/cliente/perfil" style="color: white;">Perfil</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+	<div th:if="${alert != null}" class="alert alert-warning" role="alert" th:text="${alert}">
+	</div>
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-md-8">
+				<div th:each="item : ${pedido.getItens()}">
+					<div class="card mt-2 text-truncate">
+						<div class="card-body d-flex justify-content-between align-items-center">
+							<div class="col-md-3">
+								<img class="img-thumbnail" th:src="@{${item.getProduto().getPathImg()}}"  alt="">
+							</div>
+							<div class="col">
+								<div class="row">
+									<p th:text="${#strings.abbreviate(item.getProduto().getNome(),35)}" style="font-size: 25pt; align-self: start"></p>
+									
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-6">
+										<a th:href="@{'/carrinho/removeItem/' + ${item.getProduto().getId()}}" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;"><i class="bi bi-trash"></i></a>
+										<button th:attr="onclick=|editItem('${item.getProduto().getId()}')|" class="btn" role="button" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-pencil"></i></button>
+										<br>
+										<form th:action="@{'/carrinho/editItem'}" method="post" >
+											<input type="hidden" th:value="${item.getProduto().getId()}" name="id" >
+											<input th:id="${'txbQnt' + item.getProduto().getId()}" th:value="${item.getQnt()}" name="qnt" autocomplete="off" min="1" type="number" style="width: 30%;" disabled>
+											<br>
+											<button class="btn" hidden="hidden" th:id="${'btnEditItem' + item.getProduto().getId()}" style="background-color: rgb(4, 152, 11); color: white;" type="submit">Salvar</button>
+										</form>
+
+									</div>
+									
+									<div class="col-md-6">
+										<strong  style="font-size: 20pt; align-self: start" th:text="${#numbers.formatCurrency(item.getValorUnit())}"></strong>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+						<br>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col">
+						<div class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								Endereço entrega
+								<a href="/carrinho/selecionarEndereco" role="button" class="btn" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-arrow-left-right"></i></a>
+							</div>
+							<div class="card-body" th:if="${pedido.getEnderecoEntrega() != null}">
+								<p th:text="${'Logradouro: ' + pedido.getEnderecoEntrega().getLogradouro()}"></p>
+								<p th:text="${'Numero: ' + pedido.getEnderecoEntrega().getNumero()}"></p>
+								<p th:text="${'Bairro: ' + pedido.getEnderecoEntrega().getBairro()}"></p>
+								<p th:text="${'Cidade: ' + pedido.getEnderecoEntrega().getCidade().getNome()}"></p>
+								<p th:text="${'UF: ' + pedido.getEnderecoEntrega().getCidade().getUf()}"></p>
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="card">
+							<div class="card-header d-flex justify-content-between align-items-center">
+								Cartões
+								<a href="/carrinho/selecionarCartao" role="button" class="btn" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-plus-circle"></i></a>
+							</div>
+							<div class="card-body" th:each="pagamento:${pedido.getPagamentoList()}">
+								<div class="card">
+									<div class="card-header d-flex justify-content-between align-items-center">
+										<div th:text="${pagamento.getCartao().getDigitos()}">
+										</div>
+										<div>
+											<button th:attr="onclick=|editPagamento('${pagamento.getCartao().getId()}')|" class="btn" role="button" style="background-color: rgb(4, 152, 11); color: white;"><i class="bi bi-pencil"></i></button>
+											<a th:href="@{'/carrinho/removerCartao/' + ${pagamento.getCartao().getId()} }" class="btn" role="button" style="background-color: rgb(84, 19, 19); color: white;"><i class="bi bi-trash"></i></a>
+										</div>
+									</div>
+									<div class="card-body d-flex justify-content-between align-items-center">
+										<form action="/carrinho/editarPagamento">
+											<input type="hidden" name="id" id="id" th:value="${pagamento.getCartao().getId()}">
+											Valor:
+											<input autocomplete="off" name="valor" th:id="${'cartao' + pagamento.getCartao().getId()}" type="number" step="0.01"
+												   th:value="${pagamento.getValor()}" disabled>
+											<button autocomplete="off" th:id="${'btnSave' + pagamento.getCartao().getId()}" type="submit" hidden class="btn" style="background-color: rgb(4, 152, 11); color: white;">OK</button>
+										</form>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">
+						<h5>Cupom</h5>
+					</div>
+					<div class="card-body">
+						<form action="/carrinho/addCupom" method="post">
+							<input id="txbCupom" type="text" name="nome" class="form-control" placeholder="Cupom de Desconto" />
+							<button id="btnAplicarCupom" type="submit" class="btn btn-block mt-3" style="background-color: rgb(28, 71, 101); color: white;">Aplicar</button>
+						</form>
+					</div>
+				</div>
+				<br>
+				<div class="card">
+					<div class="card-body">
+						<div id="resumo">
+							<div class="row">
+								<div class="col">SubTotal</div>
+								<div id="subtotal" class="col" th:text="${#numbers.formatCurrency(pedido.getSubTotal())}"></div>
+							</div>
+							<div class="row">
+								<div class="col">Frete</div>
+								<div id="frete" class="col" th:text="${#numbers.formatCurrency(pedido.getFrete())}"></div>
+							</div>
+							<div class="row" th:if="${pedido.getCupons().size()>0}" th:each="cupom : ${pedido.getCupons()}">
+								<div class="col" th:text="${'Cupom-' + cupom.getNome()}"></div>
+								<div class="col" th:text="${#numbers.formatCurrency(cupom.getDesconto() * -1)}"></div>
+								<div class="col">
+									<a th:href="@{'/carrinho/removerCupom/' + ${cupom.getId()}}" style="font-size: smaller">[Remover]</a>
+								</div>
+							</div>
+
+						</div>
+						<hr style="background-color: rgb(128, 137, 147);">
+						<div class="row">
+							<div class="col">Total</div>
+							<div id="total" class="col" th:text="${#numbers.formatCurrency(pedido.getTotal())}"></div>
+						</div>
+						<a id="btnFinalizar" href="/carrinho/finalizarCompra"><button class="btn btn-block mt-3"
+							style="background-color: rgb(28, 71, 101); color: white;">Finalizar</button></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<h2>Recomendações</h2>
+		<hr>
+		<div class="row">
+			<a href="/recomendacao/show" role="button" class="btn" style="background-color: rgb(28, 71, 101); color: white;">Clique aqui para ver recomendações de livros</a>
+		</div>
+	</div>
+		<script>
+			function editPagamento(id){
+				document.getElementById("cartao"+id).disabled = false;
+				document.getElementById("btnSave"+id).hidden = false;
+			}
+
+			function editItem(id){
+				document.getElementById("txbQnt"+id).disabled = false;
+				document.getElementById("btnEditItem"+id).hidden = false;
+			}
+
+		</script>
+</body>
+
+</html>
