@@ -42,7 +42,7 @@
             </div>
             <div class="card-body">
 
-                <form id="formEndereco" role="form" method="post" th:action="@{/endereco/editarEndereco}"
+                <form id="formEndereco" role="form" method="post" th:action="@{/endereco/updateEndereco}"
                     th:object="${endereco}">
                     <input type="hidden" th:value="*{id}" th:field="*{id}">
                     <div class="form-row">

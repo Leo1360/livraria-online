@@ -36,54 +36,23 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 Endereços de entrega
-                <a href="/cliente/cadastrarendereco" class="btn" role="button" style="background-color: rgb(28, 71, 101); color: white;">+</a>
+                <a href="/endereco/cadastrar?onEdit=1" class="btn" role="button" style="background-color: rgb(28, 71, 101); color: white;">+</a>
             </div>
         </div>
         <br>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                Rua dos Bobos
-            </div>
+        <div class="card" th:each="endereco: ${listEndereco}">
+            <div class="card-header d-flex justify-content-between align-items-center" th:text="${endereco.getLogradouro()}"></div>
             <div class="card-body">
-                <p>Nº: 0</p>
-                <p>Bairro: Bom Retiro</p>
-                <p>Cidade: São Paulo</p>
-                <p>UF: SP</p>
-                <a href="" class="btn" role="button"
+                <p th:text="${'Nº: ' + endereco.getNumero()}"></p>
+                <p th:text="${'Bairro: ' + endereco.getBairro()}"></p>
+                <p th:text="${'Cidade: ' + endereco.getCidade().getNome()}"></p>
+                <p th:text="${'UF: ' + endereco.getCidade().getUf()}"></p>
+                <a th:href="@{'/endereco/editar/' + ${endereco.getId()}}" class="btn" role="button"
                     style="background-color: rgb(28, 71, 101); color: white;">Editar</a>
-                <a href="" class="btn btn btn-danger" role="button" style="color: white;">Deletar</a>
+                <a th:href="@{'/endereco/deleteEndereco/' + ${endereco.getId()}}" class="btn btn btn-danger" role="button" style="color: white;">Deletar</a>
             </div>
         </div>
-        <br>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                Rua dos Bobos
-            </div>
-            <div class="card-body">
-                <p>Nº: 0</p>
-                <p>Bairro: Bom Retiro</p>
-                <p>Cidade: São Paulo</p>
-                <p>UF: SP</p>
-                <a href="" class="btn" role="button"
-                    style="background-color: rgb(28, 71, 101); color: white;">Editar</a>
-                <a href="" class="btn btn btn-danger" role="button" style="color: white;">Deletar</a>
-            </div>
-        </div>
-        <br>
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                Rua dos Bobos
-            </div>
-            <div class="card-body">
-                <p>Nº: 0</p>
-                <p>Bairro: Bom Retiro</p>
-                <p>Cidade: São Paulo</p>
-                <p>UF: SP</p>
-                <a href="" class="btn" role="button"
-                    style="background-color: rgb(28, 71, 101); color: white;">Editar</a>
-                <a href="" class="btn btn btn-danger" role="button" style="color: white;">Deletar</a>
-            </div>
-        </div>
+
     </div>
 </body>
 
