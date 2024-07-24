@@ -52,15 +52,7 @@ public class ClienteController {
         return "cliente/cartoes";
     }
     
-    @GetMapping("/enderecos")
-    public String listarEndereco(HttpSession session,Model model) {
-        if(session.getAttribute("clienteId") == null){
-            return "redirect:/cliente/novo";
-        }
-        Cliente cliente = clienteService.findById((long)session.getAttribute("clienteId"));
-        model.addAttribute("listEndereco", cliente.getEnderecosEntrega());
-        return "cliente/enderecos";
-    }
+
 
     @GetMapping("/perfil")
     public String mostrarCliente(HttpSession session,Model model) {
@@ -98,13 +90,7 @@ public class ClienteController {
         return "cliente/cadastrar_cartao";
     }
 
-    @GetMapping("/cadastrarendereco")
-    public String cadastroEndereco(HttpSession session,Model model, @RequestParam(required=false, name = "onEdit") String onEdit) {
-        Endereco endereco =  new Endereco();
-        model.addAttribute("endereco", endereco);
-        model.addAttribute("onEdit", onEdit);
-        return "cliente/cadastrar_endereco";
-    }
+
 
 
     // --------------------create----------------------------
@@ -128,19 +114,10 @@ public class ClienteController {
             return "redirect:/cliente/cartoes";
         }
         clienteService.setCartaoPreferencial(clientid, cartao.getId());
-        return "redirect:/cliente/cadastrarendereco";
+        return "redirect:/endereco/cadastrar";
     }
     
-    @PostMapping("/addEndereco")
-    public String addEndereco(HttpSession session, @ModelAttribute("endereco") Endereco endereco, @RequestParam(required=false, name = "onEdit") String onEdit) {
-        // salvando cliente
-        clienteService.addEnderecoEntrega((long)session.getAttribute("clienteId"),endereco);
-        // salvando id do cliente na sessão
-        if (onEdit != null) {
-            return "redirect:/cliente/endereco";
-        }
-        return "redirect:/cliente/perfil";
-    }
+
 
     // -------------------update----------------------------
 
@@ -159,11 +136,6 @@ public class ClienteController {
         return "redirect:/cliente/cartoes";
     }
 
-    @GetMapping("/deleteEndereco")
-    public String  deleteEndereco(HttpSession session,@RequestParam(name = "id") Long id){
-        clienteService.removeEnderecoEntrega((long)session.getAttribute("clienteId"), id);
-        return "redirect:/cliente/endereco";
-    }
 
     @GetMapping("/deletarConta")
     public String deletarConta(HttpSession session) {
@@ -171,6 +143,9 @@ public class ClienteController {
         session.removeAttribute("clienteId");
         return "redirect:/cliente/novo";
     }
+
+    //--------------------------------------------------------
+
 
 
 }
