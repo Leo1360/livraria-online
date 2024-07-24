@@ -37,7 +37,7 @@
     <div class="container">
         <div class="row justify-content-end">
             <div class="col-md-4">
-                <a href="/cliente/cadastrarcartao?onEdit=1" class="btn btn-success">+</a>
+                <a href="/cartao/cadastrarcartao?onEdit=1" class="btn btn-success">+</a>
             </div>
         </div>
 
@@ -53,7 +53,7 @@
                         <p th:text="*{vencimento}" class="card-text"></p>
                         <strong>CPF: </strong>
                         <p th:text="*{cpf}" class="card-text"></p>
-                        <a th:href="@{'/cliente/deleteCartao'(id=${cartao.id})}" class="btn btn-danger">Excluir</a>
+                        <a th:href="@{'/cartao/deleteCartao' (id=${cartao.id})}" class="btn btn-danger">Excluir</a>
                     </div>
                 </div>
             </div>
