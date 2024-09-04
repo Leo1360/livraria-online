@@ -1,17 +1,18 @@
 package com.fatec.livrariaonlinejpa.services;
 
-import com.fatec.livrariaonlinejpa.model.Cliente;
-import com.fatec.livrariaonlinejpa.model.Cupom;
-import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
-import com.fatec.livrariaonlinejpa.model.TipoCupom;
-import com.fatec.livrariaonlinejpa.repositories.CupomRepository;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
-import java.util.List;
+import com.fatec.livrariaonlinejpa.model.Cupom;
+import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
+import com.fatec.livrariaonlinejpa.model.TipoCupom;
+import com.fatec.livrariaonlinejpa.repositories.CupomRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

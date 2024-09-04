@@ -1,18 +1,15 @@
 package com.fatec.livrariaonlinejpa.repositories;
 
-import com.fatec.livrariaonlinejpa.model.Pedido;
-import com.fatec.livrariaonlinejpa.util.DataPoint;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.fatec.livrariaonlinejpa.model.Pedido;
 
 @Repository
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {

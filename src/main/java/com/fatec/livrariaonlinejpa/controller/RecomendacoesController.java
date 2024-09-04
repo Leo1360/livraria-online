@@ -1,15 +1,18 @@
 package com.fatec.livrariaonlinejpa.controller;
 
-import com.fatec.livrariaonlinejpa.services.RecomendacoesService;
-import com.fatec.livrariaonlinejpa.util.Message;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.fatec.livrariaonlinejpa.services.RecomendacoesService;
+import com.fatec.livrariaonlinejpa.util.Message;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/recomendacao")

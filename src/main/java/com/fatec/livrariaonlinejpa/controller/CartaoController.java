@@ -1,14 +1,20 @@
 package com.fatec.livrariaonlinejpa.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.fatec.livrariaonlinejpa.model.Cartao;
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.services.CartaoService;
 import com.fatec.livrariaonlinejpa.services.ClienteService;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,22 +1,25 @@
 package com.fatec.livrariaonlinejpa.controller;
 
-import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
-import com.fatec.livrariaonlinejpa.dto.EnderecoDTO;
-import com.fatec.livrariaonlinejpa.model.*;
-import com.fatec.livrariaonlinejpa.services.CarrinhoService;
-import com.fatec.livrariaonlinejpa.services.PedidoService;
-import com.fatec.livrariaonlinejpa.services.ProdutoService;
-import com.fatec.livrariaonlinejpa.util.ValidationResult;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
+import com.fatec.livrariaonlinejpa.dto.EnderecoDTO;
+import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.services.CarrinhoService;
+import com.fatec.livrariaonlinejpa.services.PedidoService;
+import com.fatec.livrariaonlinejpa.util.ValidationResult;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,13 +1,15 @@
 package com.fatec.livrariaonlinejpa.dto;
 
-import com.fatec.livrariaonlinejpa.model.Cartao;
-import com.fatec.livrariaonlinejpa.model.Pagamento;
-import com.fatec.livrariaonlinejpa.services.CartaoService;
-import lombok.Data;
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
+import com.fatec.livrariaonlinejpa.model.Cartao;
+import com.fatec.livrariaonlinejpa.model.Pagamento;
+import com.fatec.livrariaonlinejpa.services.CartaoService;
+
+import lombok.Data;
 
 @Component
 @Data

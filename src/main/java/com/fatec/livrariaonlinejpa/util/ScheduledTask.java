@@ -1,18 +1,17 @@
 package com.fatec.livrariaonlinejpa.util;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
 import com.fatec.livrariaonlinejpa.model.Produto;
 import com.fatec.livrariaonlinejpa.model.ResumoVenda;
 import com.fatec.livrariaonlinejpa.repositories.ResumoVendaRepository;
 import com.fatec.livrariaonlinejpa.services.AdmService;
 import com.fatec.livrariaonlinejpa.services.ProdutoService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

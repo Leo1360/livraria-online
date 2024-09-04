@@ -1,18 +1,19 @@
 package com.fatec.livrariaonlinejpa.controller;
 
-import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
-import com.fatec.livrariaonlinejpa.model.ItemCompra;
-import com.fatec.livrariaonlinejpa.model.Produto;
-import com.fatec.livrariaonlinejpa.services.ProdutoService;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
+import com.fatec.livrariaonlinejpa.model.Produto;
+import com.fatec.livrariaonlinejpa.services.ProdutoService;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor

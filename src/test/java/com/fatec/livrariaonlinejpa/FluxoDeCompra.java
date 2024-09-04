@@ -1,19 +1,23 @@
 package com.fatec.livrariaonlinejpa;
 
-import com.fatec.livrariaonlinejpa.model.*;
-import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
-import com.fatec.livrariaonlinejpa.services.ClienteService;
-import com.fatec.livrariaonlinejpa.services.PedidoService;
-import com.fatec.livrariaonlinejpa.services.ProdutoService;
-import com.fatec.livrariaonlinejpa.util.DataPoint;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.fatec.livrariaonlinejpa.model.Cliente;
+import com.fatec.livrariaonlinejpa.model.ItemCompra;
+import com.fatec.livrariaonlinejpa.model.Pagamento;
+import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.model.Produto;
+import com.fatec.livrariaonlinejpa.model.StatusPedido;
+import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
+import com.fatec.livrariaonlinejpa.services.ClienteService;
+import com.fatec.livrariaonlinejpa.services.PedidoService;
+import com.fatec.livrariaonlinejpa.services.ProdutoService;
 
 @SpringBootTest
 class FluxoDeCompra {

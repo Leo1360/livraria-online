@@ -1,24 +1,21 @@
 package com.fatec.livrariaonlinejpa.services;
 
-import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
-import com.fatec.livrariaonlinejpa.dto.EnderecoDTO;
-import com.fatec.livrariaonlinejpa.model.*;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
+import java.math.BigDecimal;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.fatec.livrariaonlinejpa.dto.AddCarrinhoItemDTO;
+import com.fatec.livrariaonlinejpa.dto.EnderecoDTO;
+import com.fatec.livrariaonlinejpa.model.Cliente;
+import com.fatec.livrariaonlinejpa.model.Cupom;
+import com.fatec.livrariaonlinejpa.model.Endereco;
+import com.fatec.livrariaonlinejpa.model.ItemCompra;
+import com.fatec.livrariaonlinejpa.model.Pagamento;
+import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.model.Produto;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

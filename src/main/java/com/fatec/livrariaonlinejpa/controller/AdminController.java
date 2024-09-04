@@ -1,27 +1,28 @@
 package com.fatec.livrariaonlinejpa.controller;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.fatec.livrariaonlinejpa.model.Pedido;
-import com.fatec.livrariaonlinejpa.model.StatusPedido;
 import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
-import com.fatec.livrariaonlinejpa.services.AdmService;
+import com.fatec.livrariaonlinejpa.model.StatusPedido;
 import com.fatec.livrariaonlinejpa.services.PedidoService;
 import com.fatec.livrariaonlinejpa.services.ResumoVendasService;
 import com.fatec.livrariaonlinejpa.services.RetornoMercadoriaService;
 import com.fatec.livrariaonlinejpa.util.RelatorioVendas;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,7 +30,6 @@ import java.util.List;
 public class AdminController {
     private final PedidoService pedidoService;
     private final RetornoMercadoriaService retornoMercadoriaService;
-    private final AdmService admService;
     private final ResumoVendasService resumoVendasService;
 
     @GetMapping("/perfil")

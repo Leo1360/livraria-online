@@ -1,9 +1,9 @@
 package com.fatec.livrariaonlinejpa.util;
 
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Data;
 
 @Data
 public class RelatorioVendas {

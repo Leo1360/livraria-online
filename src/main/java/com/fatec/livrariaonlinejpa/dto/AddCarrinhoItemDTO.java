@@ -2,11 +2,8 @@ package com.fatec.livrariaonlinejpa.dto;
 
 import com.fatec.livrariaonlinejpa.model.ItemCompra;
 import com.fatec.livrariaonlinejpa.model.Produto;
-import com.fatec.livrariaonlinejpa.services.ProdutoService;
+
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 
 @Data
 public class AddCarrinhoItemDTO {

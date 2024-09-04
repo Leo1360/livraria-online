@@ -1,20 +1,26 @@
 package com.fatec.livrariaonlinejpa.controller;
 
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.fatec.livrariaonlinejpa.dto.NovaTrocaDTO;
 import com.fatec.livrariaonlinejpa.model.Pedido;
 import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
-import com.fatec.livrariaonlinejpa.services.ClienteService;
 import com.fatec.livrariaonlinejpa.services.ItemCompraService;
 import com.fatec.livrariaonlinejpa.services.PedidoService;
 import com.fatec.livrariaonlinejpa.services.RetornoMercadoriaService;
 import com.fatec.livrariaonlinejpa.util.ValidationResult;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

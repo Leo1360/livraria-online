@@ -1,18 +1,26 @@
 package com.fatec.livrariaonlinejpa.services;
 
-import com.fatec.livrariaonlinejpa.model.*;
-import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
-import com.fatec.livrariaonlinejpa.util.DataPoint;
-import com.fatec.livrariaonlinejpa.util.ValidationResult;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import com.fatec.livrariaonlinejpa.model.Cupom;
+import com.fatec.livrariaonlinejpa.model.ItemCompra;
+import com.fatec.livrariaonlinejpa.model.Pagamento;
+import com.fatec.livrariaonlinejpa.model.Pedido;
+import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
+import com.fatec.livrariaonlinejpa.model.StatusPedido;
+import com.fatec.livrariaonlinejpa.model.StatusRetMercadoria;
+import com.fatec.livrariaonlinejpa.model.TipoCupom;
+import com.fatec.livrariaonlinejpa.model.TipoRetornoMercadoria;
+import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
+import com.fatec.livrariaonlinejpa.util.ValidationResult;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

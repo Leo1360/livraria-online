@@ -1,10 +1,11 @@
 package com.fatec.livrariaonlinejpa.repositories;
 
-import com.fatec.livrariaonlinejpa.model.Cupom;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.fatec.livrariaonlinejpa.model.Cupom;
 
 @Repository
 public interface CupomRepository extends JpaRepository<Cupom, Long> {

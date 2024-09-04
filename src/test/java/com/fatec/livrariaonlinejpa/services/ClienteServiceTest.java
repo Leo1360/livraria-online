@@ -1,9 +1,8 @@
 package com.fatec.livrariaonlinejpa.services;
 
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 class ClienteServiceTest {

@@ -1,15 +1,16 @@
 package com.fatec.livrariaonlinejpa.services;
 
-import com.fatec.livrariaonlinejpa.model.Pedido;
-import com.fatec.livrariaonlinejpa.model.Produto;
-import com.fatec.livrariaonlinejpa.repositories.ProdutoRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fatec.livrariaonlinejpa.model.Produto;
+import com.fatec.livrariaonlinejpa.repositories.ProdutoRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

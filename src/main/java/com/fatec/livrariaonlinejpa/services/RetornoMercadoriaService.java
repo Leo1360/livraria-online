@@ -1,16 +1,21 @@
 package com.fatec.livrariaonlinejpa.services;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.fatec.livrariaonlinejpa.dto.NovaTrocaDTO;
-import com.fatec.livrariaonlinejpa.model.*;
-import com.fatec.livrariaonlinejpa.repositories.ClienteRepository;
+import com.fatec.livrariaonlinejpa.model.Cupom;
+import com.fatec.livrariaonlinejpa.model.RetornoMercadoria;
+import com.fatec.livrariaonlinejpa.model.StatusPedido;
+import com.fatec.livrariaonlinejpa.model.StatusRetMercadoria;
+import com.fatec.livrariaonlinejpa.model.TipoRetornoMercadoria;
 import com.fatec.livrariaonlinejpa.repositories.ItemCompraRepository;
 import com.fatec.livrariaonlinejpa.repositories.PedidoRepository;
 import com.fatec.livrariaonlinejpa.repositories.RetornoMercadoriaRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

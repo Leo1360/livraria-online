@@ -1,21 +1,21 @@
 package com.fatec.livrariaonlinejpa.services;
 
-import com.fatec.livrariaonlinejpa.model.ItemCompra;
-import com.fatec.livrariaonlinejpa.model.Produto;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import org.json.JSONObject;
+import org.springframework.stereotype.Service;
+
+import com.fatec.livrariaonlinejpa.model.Produto;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

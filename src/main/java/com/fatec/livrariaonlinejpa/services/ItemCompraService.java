@@ -1,11 +1,13 @@
 package com.fatec.livrariaonlinejpa.services;
 
-import com.fatec.livrariaonlinejpa.model.ItemCompra;
-import com.fatec.livrariaonlinejpa.repositories.ItemCompraRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import com.fatec.livrariaonlinejpa.model.ItemCompra;
+import com.fatec.livrariaonlinejpa.repositories.ItemCompraRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

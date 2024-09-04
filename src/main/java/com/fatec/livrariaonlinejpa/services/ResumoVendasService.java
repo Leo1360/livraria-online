@@ -1,21 +1,20 @@
 package com.fatec.livrariaonlinejpa.services;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.fatec.livrariaonlinejpa.model.Produto;
 import com.fatec.livrariaonlinejpa.model.ResumoVenda;
 import com.fatec.livrariaonlinejpa.repositories.ResumoVendaRepository;
 import com.fatec.livrariaonlinejpa.util.DataPoint;
 import com.fatec.livrariaonlinejpa.util.DataSet;
 import com.fatec.livrariaonlinejpa.util.RelatorioVendas;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoField;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +25,12 @@ public class ResumoVendasService {
     private List<List<ResumoVenda>> getesumoVendasPeriodo(LocalDate iniDate, LocalDate endDate){
         List<Produto> produtos = produtoService.findAll();
         List<ResumoVenda> ret = repo.getResumoVendaByDateIsBetweenOrderByDate(iniDate,endDate);
-        List<List<ResumoVenda>> relatorio = produtos.stream()
+        return produtos.stream()
                 .map(p -> ret.stream()
                         .filter(r -> r.getProduto().getId() == p.getId())
                         .toList()
                 )
                 .toList();
-
-        return relatorio;
     }
 
     public RelatorioVendas getRelatVenda(LocalDate iniDate, LocalDate endDate){

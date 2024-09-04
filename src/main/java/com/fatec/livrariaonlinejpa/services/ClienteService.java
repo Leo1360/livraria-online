@@ -1,9 +1,6 @@
 package com.fatec.livrariaonlinejpa.services;
 
 
-import java.util.Optional;
-
-import com.fatec.livrariaonlinejpa.repositories.CartaoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -11,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.fatec.livrariaonlinejpa.model.Cartao;
 import com.fatec.livrariaonlinejpa.model.Cliente;
 import com.fatec.livrariaonlinejpa.model.Endereco;
+import com.fatec.livrariaonlinejpa.repositories.CartaoRepository;
 import com.fatec.livrariaonlinejpa.repositories.ClienteRepository;
 
 import lombok.RequiredArgsConstructor;
